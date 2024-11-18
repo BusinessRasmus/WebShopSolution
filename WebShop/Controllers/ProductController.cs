@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using WebShop.Models;
-using WebShop.UnitOfWork;
+using WebShop.DataAccess.UnitOfWork;
+using WebShop.Shared.Models;
 
 namespace WebShop.Controllers
 {
@@ -8,8 +8,11 @@ namespace WebShop.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        public ProductController()
+
+        private readonly IUnitOfWork _unitOfWork;
+        public ProductController(IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
         }
 
         // Endpoint för att hämta alla produkter
@@ -22,8 +25,10 @@ namespace WebShop.Controllers
 
         // Endpoint för att lägga till en ny produkt
         [HttpPost]
-        public ActionResult AddProduct(Product product)
+        public async Task<ActionResult> AddProduct(Product product)
         {
+            await _unitOfWork.ProductRepository.Add(product);
+            await _unitOfWork.Complete();
             // Lägger till produkten via repository
 
             // Sparar förändringar

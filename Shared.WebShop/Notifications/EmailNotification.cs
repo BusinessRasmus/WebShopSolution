@@ -1,6 +1,7 @@
-﻿using WebShop.Models;
+﻿
+using WebShop.Shared.Models;
 
-namespace WebShop.Notifications
+namespace WebShop.Shared.Notifications
 {
     // En konkret observatör som skickar e-postmeddelanden
     public class EmailNotification : INotificationObserver
@@ -11,5 +12,6 @@ namespace WebShop.Notifications
             // För enkelhetens skull skriver vi ut till konsolen
             Console.WriteLine($"Email Notification: New product added - {product.Name}");
         }
+
     }
 }

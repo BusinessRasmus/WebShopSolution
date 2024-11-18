@@ -1,6 +1,6 @@
-﻿using WebShop.Models;
+﻿using WebShop.Shared.Models;
 
-namespace WebShop.Notifications
+namespace WebShop.Shared.Notifications
 {
     // Subject som håller reda på observatörer och notifierar dem
     public class ProductSubject

@@ -1,6 +1,6 @@
-﻿using WebShop.Models;
+﻿using WebShop.Shared.Models;
 
-namespace WebShop.Notifications
+namespace WebShop.Shared.Notifications
 {
     // Gränssnitt för notifieringsobservatörer enligt Observer Pattern
     public interface INotificationObserver
