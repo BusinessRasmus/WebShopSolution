@@ -4,7 +4,7 @@ using WebShop.Repositories;
 namespace WebShop.UnitOfWork
 {
     // Gränssnitt för Unit of Work
-    public interface IUnitOfWork
+    public interface IUnitOfWork //TODO Ska ärva av IDisposible?
     {
          // Repository för produkter
          // Sparar förändringar (om du använder en databas)

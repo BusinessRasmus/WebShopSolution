@@ -7,5 +7,7 @@ namespace WebShop.Repositories
     {
         IEnumerable<Product> GetAll(); // Hämtar alla produkter
         void Add(Product product); // Lägger till en ny produkt
+
+        //TODO: Add remaining CRUD if needed.
     }
 }
