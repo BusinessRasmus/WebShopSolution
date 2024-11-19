@@ -33,7 +33,7 @@ namespace WebShop.DataAccess.Repositories
             return result;
         }
 
-        public async Task Remove(int id)
+        public async Task DeleteAsync(int id)
         {
             var itemToRemove = await _dbSet.FindAsync(id);
             if (itemToRemove is null)

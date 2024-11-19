@@ -19,6 +19,8 @@ public class ProductControllerTests
         _controller = new ProductController(fakeUow);
     }
 
+    #region Mocks
+
     [Fact]
     public async Task GetProductRepository_WithValidParameters_ReturnsRepository()
     {
@@ -63,5 +65,66 @@ public class ProductControllerTests
         A.CallTo(() => fakeRepository.AddAsync(dummyProduct)).MustHaveHappenedOnceExactly();
     }
 
+    #endregion
 
+    #region Unit Tests
+    [Fact]
+    public async Task DeleteProduct_ValidId_ReturnsOk()
+    {
+        // Arrange
+        var productToDelete = A.Fake<Product>();
+
+
+        // Act
+        await _controller.DeleteProduct(productToDelete.Id);
+
+        // Assert
+        A.CallTo(() => fakeUow.Repository<Product>().Result.DeleteAsync(productToDelete.Id)).MustHaveHappened();
+    }
+
+    [Fact]
+    public async Task DeleteProduct_InvalidModelState_ReturnsBadRequest()
+    {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+    [Fact]
+    public async Task DeleteProduct_ProductNotFound_ReturnsNotFound()
+    {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+    [Fact]
+    public async Task DeleteProduct_DeleteFails_ThrowsAggregateException()
+    {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+    [Fact]
+    public async Task DeleteProduct_ValidId_CallsDeleteAsync()
+    {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+
+
+
+
+    #endregion
 }
