@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using WebShop.DataAccess;
+using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Notifications;
 
@@ -14,6 +15,7 @@ builder.Services.AddControllers();
 // Registrera Unit of Work i DI-container
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<INotificationObserver, EmailNotification>();
+builder.Services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

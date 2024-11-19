@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace WebShop.Shared.Models
@@ -13,6 +14,8 @@ namespace WebShop.Shared.Models
         public Customer Customer { get; set; }
         public int CustomerId { get; set; }
         public int Quantity { get; set; }
+
+        [JsonIgnore]
         public ICollection<OrderItem> OrderProducts { get; set; } = new List<OrderItem>();
 
     }

@@ -2,37 +2,21 @@
 using WebShop.Shared.Notifications;
 using WebShop.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using WebShop.DataAccess.Factory;
 
 namespace WebShop.DataAccess.UnitOfWork
 {
-    public class UnitOfWork: IUnitOfWork
+    public class UnitOfWork(WebShopDbContext context, IRepositoryFactory factory, ProductSubject productSubject = null) : IUnitOfWork
     {
-        public WebShopDbContext _context;
-
-        public IGenericRepository<Product> ProductRepository { get; }
-        public IGenericRepository<Order> OrderRepository { get; }
-        public IGenericRepository<Customer> CustomerRepository { get; }
-
-
-        // Hämta produkter från repository
-
         private readonly ProductSubject _productSubject;
 
+        // Om inget ProductSubject injiceras, skapa ett nytt
+        // och Registrera standardobservatörer
+        //TODO Avkommentera v
+        //_productSubject = productSubject ?? new ProductSubject();
+        //_productSubject.Attach(new EmailNotification());
+
         // Konstruktor används för tillfället av Observer pattern
-        public UnitOfWork(WebShopDbContext context, ProductSubject productSubject = null)
-        {
-            _context = context;
-            ProductRepository = new GenericRepository<Product>(context);
-            OrderRepository = new GenericRepository<Order>(context);
-            CustomerRepository = new GenericRepository<Customer>(context);
-
-
-            // Om inget ProductSubject injiceras, skapa ett nytt
-            _productSubject = productSubject ?? new ProductSubject();
-
-            // Registrera standardobservatörer
-            _productSubject.Attach(new EmailNotification());
-        }
 
         public void NotifyProductAdded(Product product)
         {
@@ -41,12 +25,18 @@ namespace WebShop.DataAccess.UnitOfWork
 
         public async Task Complete()
         {
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         public async void Dispose()
         {
-            await _context.DisposeAsync();
+            await context.DisposeAsync();
+        }
+
+        public async Task<IRepository<TEntity>> Repository<TEntity>() where TEntity : class
+        {
+            var repository = await factory.CreateRepository<TEntity>();
+            return repository;
         }
     }
 }

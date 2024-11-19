@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
+using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
 
@@ -10,6 +12,7 @@ namespace WebShop.Controllers
     {
 
         private readonly IUnitOfWork _unitOfWork;
+
         public CustomerController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -17,22 +20,25 @@ namespace WebShop.Controllers
 
         // Endpoint för att hämta alla produkter
         [HttpGet]
-        public ActionResult<IEnumerable<Customer>> GetCustomer()
+        public async Task<ActionResult<Customer>> GetById(int id)
         {
-            // Behöver använda repository via Unit of Work för att hämta produkter
-            return Ok();
+            var repository = await _unitOfWork.Repository<Customer>();
+            var response = await repository.GetByIdAsync(id);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
         }
 
         // Endpoint för att lägga till en ny produkt
         [HttpPost]
-        public ActionResult AddCustomer(Customer customer)
+        public async Task<ActionResult> Add(Customer customer)
         {
-            _unitOfWork.CustomerRepository.Add(customer);
-            // Lägger till produkten via repository
-
-            // Sparar förändringar
-
-            // Notifierar observatörer om att en ny produkt har lagts till
+            var repository = await _unitOfWork.Repository<Customer>();
+            await repository.AddAsync(customer);
 
             return Ok();
         }

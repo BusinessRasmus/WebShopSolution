@@ -16,23 +16,32 @@ namespace WebShop.Controllers
         }
 
         // Endpoint för att hämta alla produkter
-        [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetProducts()
-        {
-            // Behöver använda repository via Unit of Work för att hämta produkter
-            return Ok();
-        }
+        //[HttpGet]
+        //public Task <ActionResult<IEnumerable<Product>>> GetProducts()
+        //{
+            
+        //    //return Ok();
+        //}
 
         // Endpoint för att lägga till en ny produkt
         [HttpPost]
-        public async Task<ActionResult> AddProduct(Product product)
+        public async Task<ActionResult> AddProduct([FromBody] Product product)
         {
-            await _unitOfWork.ProductRepository.Add(product);
-            await _unitOfWork.Complete();
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+
+            if (product is null)
+                return BadRequest();
+
+            var repository = await _unitOfWork.Repository<Product>();
             // Lägger till produkten via repository
+            await repository.AddAsync(product);
 
             // Sparar förändringar
+            await _unitOfWork.Complete();
 
+            //TODO Lägg in notification här.
             // Notifierar observatörer om att en ny produkt har lagts till
 
             return Ok();

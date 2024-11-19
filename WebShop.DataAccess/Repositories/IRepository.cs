@@ -1,12 +1,17 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace WebShop.DataAccess.Repositories
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<TE> where TE : class
     {
-        Task<T> GetById(int id);
-        Task<IEnumerable<T>> GetAll();
-        Task Add(T item);
-        Task Update(T item);
+        Task<TE> GetByIdAsync(int id);
+        Task<IEnumerable<TE>> GetAllAsync();
+        Task AddAsync(TE item);
+        Task UpdateAsync(int id, TE item);
         Task Remove(int id);
     }
 }
