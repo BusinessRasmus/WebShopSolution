@@ -7,6 +7,7 @@ namespace WebShop.Shared.Models
     {
         public int Id { get; set; } // Unikt ID för produkten
         [Required]
+        [Length(2, 30)]
         public string Name { get; set; } // Namn på produkten
         [Required]
         public double Price { get; set; }

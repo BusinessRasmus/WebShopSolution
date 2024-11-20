@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
 
@@ -8,7 +10,6 @@ namespace WebShop.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-
         private readonly IUnitOfWork _unitOfWork;
         public ProductController(IUnitOfWork unitOfWork)
         {
@@ -16,7 +17,7 @@ namespace WebShop.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             var repository = await _unitOfWork.Repository<Product>();
             var products = await repository.GetAllAsync();
@@ -35,7 +36,7 @@ namespace WebShop.Controllers
             var product = await repository.GetByIdAsync(id);
 
             if (product is null)
-                return NotFound(Enumerable.Empty<Product>());
+                return NotFound($"No products were found.");
 
             return Ok(product);
         }
@@ -43,8 +44,10 @@ namespace WebShop.Controllers
         [HttpPost]
         public async Task<ActionResult> AddProduct([FromBody] Product product)
         {
-            if (!ModelState.IsValid)
+            if (!Validator.TryValidateObject(product, new ValidationContext(product), null, true))
+            {
                 return BadRequest();
+            }
 
             if (product is null)
                 return BadRequest();
@@ -64,8 +67,10 @@ namespace WebShop.Controllers
         [Route("{id}")]
         public async Task<ActionResult> UpdateProduct([FromRoute] int id, [FromBody] Product product)
         {
-            if (!ModelState.IsValid)
+            if (!Validator.TryValidateObject(product, new ValidationContext(product), null, true))
+            {
                 return BadRequest();
+            }
 
             if (product is null)
                 return BadRequest();
@@ -93,13 +98,13 @@ namespace WebShop.Controllers
             try
             {
                 await _unitOfWork.Repository<Product>().Result.DeleteAsync(productToDelete.Id);
+                await _unitOfWork.Complete();
             }
-            catch
+            catch (Exception e)
             {
-                throw new AggregateException("Something went wrong when deleting the specified product.");
+                _unitOfWork.Dispose();
+                return StatusCode(500, $"Internal server error: {e.Message}");
             }
-
-            await _unitOfWork.Complete();
 
             return Ok();
         }
