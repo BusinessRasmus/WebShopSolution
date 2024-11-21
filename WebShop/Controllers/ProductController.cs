@@ -77,7 +77,7 @@ namespace WebShop.Controllers
 
             var repository = await _unitOfWork.Repository<Product>();
 
-            await repository.UpdateAsync(id, product);
+            await repository.UpdateAsync(product);
             await _unitOfWork.Complete();
 
             return Ok();

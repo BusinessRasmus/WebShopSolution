@@ -10,6 +10,7 @@ using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
+using WebShopTests.RepositoryTestData;
 
 public class ProductControllerTests
 {
@@ -38,7 +39,7 @@ public class ProductControllerTests
         _productController = new ProductController(_unitOfWork);
     }
 
-    #region GetProduct
+    #region GetAllProducts
     [Fact]
     public async Task GetAllProducts_NoProductsInDb_ReturnsNotFound()
     {
@@ -53,17 +54,80 @@ public class ProductControllerTests
     [Fact]
     public async Task GetAllProducts_WithProductsInDb_ReturnsEnumerable()
     {
+        // Arrange
+        var product = new Product
+        {
+            Name = "Test",
+            Amount = 10,
+            Price = 10
+        };
+        await _productController.AddProduct(product);
+
         // Act
-        var result = await _fakeController.GetAllProducts();
-        var resultAsNotFoundObjectResult = result.Result as NotFoundObjectResult;
+        var response = await _productController.GetAllProducts();
 
         // Assert
-        Assert.IsAssignableFrom<NotFoundObjectResult>(resultAsNotFoundObjectResult);
+        Assert.IsAssignableFrom<OkObjectResult>(response.Result);
+        var responseResultValue = (response.Result as OkObjectResult).Value;
+
+        Assert.IsAssignableFrom<IEnumerable<Product>>(responseResultValue);
+        var enumerableProducts = responseResultValue as IEnumerable<Product>;
+
+        Assert.Equal(product, enumerableProducts.ToList()[0]);
+        await _dbContext.Database.EnsureDeletedAsync();
     }
 
     #endregion
 
+    #region GetProductById
+    public async Task GetProductById_WithValidId_ReturnsProduct()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 1,
+            Name = "Test",
+            Amount = 10,
+            Price = 10
+        };
+        await _productController.AddProduct(product);
 
+        // Act
+        var result = await _productController.GetProductById(product.Id);
+
+        // Assert
+        Assert.IsAssignableFrom<OkObjectResult>(result.Result);
+        var resultValue = (result.Result as OkObjectResult).Value;
+
+        Assert.IsAssignableFrom<Product>(resultValue);
+        var productResult = resultValue as Product;
+
+        Assert.Equal(product, productResult);
+        await _dbContext.Database.EnsureDeletedAsync();
+    }
+
+    public async Task GetProductById_WithInvalidId_ReturnsNotFound()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 1,
+            Name = "Test",
+            Amount = 10,
+            Price = 10
+        };
+        await _productController.AddProduct(product);
+
+        // Act
+        var result = await _productController.GetProductById(-1);
+
+        // Assert
+        Assert.IsAssignableFrom<NotFoundObjectResult>(result.Result);
+        await _dbContext.Database.EnsureDeletedAsync();
+    }
+
+
+    #endregion
 
     #region AddProduct
     [Fact]
@@ -97,7 +161,66 @@ public class ProductControllerTests
 
         // Assert
         Assert.IsAssignableFrom<BadRequestResult>(result);
+        await _dbContext.Database.EnsureDeletedAsync();
     }
+    #endregion
+
+    #region UpdateProduct
+    [Fact]
+    public async Task UpdateProduct_WithValidInput_ReturnsOkResultAndMustHaveHappenedOnceExactly()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 1,
+            Name = "Test",
+            Amount = 10,
+            Price = 10
+        };
+        await _productController.AddProduct(product);
+
+        product.Name= "Test2";
+
+        // Act
+        var result = await _productController.UpdateProduct(product.Id, product);
+        var getResponse = await _productController.GetProductById(product.Id);
+
+        // Assert
+        Assert.IsAssignableFrom<OkObjectResult>(getResponse.Result);
+        var getResponseValue = (getResponse.Result as OkObjectResult).Value;
+
+        Assert.IsAssignableFrom<Product>(getResponseValue);
+        var getResponseValueAsProduct = getResponseValue as Product;
+
+        Assert.NotEqual(getResponseValueAsProduct.Name, "Test");
+        Assert.True(getResponseValueAsProduct.Name == "Test2");
+        Assert.IsAssignableFrom<OkResult>(result);
+        await _dbContext.Database.EnsureDeletedAsync();
+    }
+
+    [Fact]
+    public async Task UpdateProduct_WithInvalidInput_ReturnsBadRequest()
+    {
+        // Arrange
+        var product = new Product
+        {
+            Id = 1,
+            Name = "Test",
+            Amount = 10,
+            Price = 10
+        };
+        await _productController.AddProduct(product);
+
+        product.Name = "T";
+
+        // Act
+        var result = await _productController.UpdateProduct(product.Id, product);
+
+        // Assert
+        Assert.IsAssignableFrom<BadRequestResult>(result);
+        await _dbContext.Database.EnsureDeletedAsync();
+    }
+
     #endregion
 
     #region DeleteProduct
@@ -131,6 +254,7 @@ public class ProductControllerTests
 
         // Assert
         Assert.IsAssignableFrom<NotFoundObjectResult>(result);
+        await _dbContext.Database.EnsureDeletedAsync();
     }
 
     [Fact]
@@ -174,9 +298,9 @@ public class ProductControllerTests
     }
     #endregion
 
-    #region ProductRepository_GetProduct
+    #region Repository_GetById
     [Fact]
-    public async Task GetProductById_WithValidInput_ReturnsProduct()
+    public async Task GetById_WithValidInput_ReturnsProduct_FAKEITEASY()
     {
         // Arrange
         var fakeProductRepo = await _fakeUow.Repository<Product>();
@@ -191,6 +315,37 @@ public class ProductControllerTests
         A.CallTo(() => fakeProductRepo.GetByIdAsync(2)).MustHaveHappenedOnceExactly();
     }
 
+    [Theory]
+    [ClassData(typeof(RepositoryTestData))]
+    public async Task AddAsync_WithValidInput_ReturnsProduct(Product[] input)
+    {
+        var repo = await _unitOfWork.Repository<Product>();
+        // Arrange
+        foreach (var p in input)
+        {
+            // Act
+            await repo.AddAsync(p);
+            var result = await repo.GetByIdAsync(p.Id);
+
+            // Assert
+            Assert.Equal(p.Name, result.Name);
+        }
+
+        var b = await repo.GetAllAsync();
+        var c = b.ToList();
+        Assert.Equal(input.Length, c.Count);
+        
+    }
+
+    #endregion
+
+    #region Repository_AddAsync
+
+    #endregion
+
+
+
+    #region Unit Of Work
     [Fact]
     public async Task GetProductRepository_WithValidParameters_ReturnsRepository()
     {

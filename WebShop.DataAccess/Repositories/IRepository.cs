@@ -11,7 +11,7 @@ namespace WebShop.DataAccess.Repositories
         Task<TE> GetByIdAsync(int id);
         Task<IEnumerable<TE>> GetAllAsync();
         Task AddAsync(TE item);
-        Task UpdateAsync(int id, TE item);
+        Task UpdateAsync(TE item);
         Task DeleteAsync(int id);
     }
 }

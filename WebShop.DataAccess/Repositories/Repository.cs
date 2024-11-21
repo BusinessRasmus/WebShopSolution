@@ -13,11 +13,6 @@ namespace WebShop.DataAccess.Repositories
             _dbSet = context.Set<TE>();
         }
 
-        public async Task AddAsync(TE item)
-        {
-            await _dbSet.AddAsync(item);
-        }
-
         public async Task<IEnumerable<TE>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
@@ -33,6 +28,13 @@ namespace WebShop.DataAccess.Repositories
             return result;
         }
 
+        public async Task AddAsync(TE item)
+        {
+            await _dbSet.AddAsync(item);
+        }
+
+        public async Task UpdateAsync(TE entity) => _dbSet.Update(entity);
+
         public async Task DeleteAsync(int id)
         {
             var itemToRemove = await _dbSet.FindAsync(id);
@@ -40,15 +42,6 @@ namespace WebShop.DataAccess.Repositories
                 return;
 
             _dbSet.Remove(itemToRemove);
-        }
-
-        public async Task UpdateAsync(int id, TE item)
-        {
-            var result = await _dbSet.FindAsync(id);
-            if (result is null)
-                return;
-
-            await _dbSet.Update(item).ReloadAsync();
         }
     }
 }
