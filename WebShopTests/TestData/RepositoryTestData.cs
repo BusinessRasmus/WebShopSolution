@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebShop.Shared.Models;
 
-namespace WebShopTests.RepositoryTestData
+namespace WebShopTests.TestData
 {
     internal class RepositoryTestData : IEnumerable<object[]>
     {

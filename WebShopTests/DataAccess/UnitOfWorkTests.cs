@@ -1,7 +1,10 @@
 using FakeItEasy;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using WebShop.Controllers;
 using WebShop.DataAccess;
 using WebShop.DataAccess.Factory;
+using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
 using WebShop.Shared.Notifications;
@@ -10,6 +13,47 @@ namespace WebShopTests.Tests
 {
     public class UnitOfWorkTests
     {
+        // Fakes
+        private readonly IUnitOfWork _fakeUow = A.Fake<IUnitOfWork>();
+        private readonly IRepository<Product> _fakeRepository = A.Fake<IRepository<Product>>();
+        private readonly ProductController _fakeController;
+
+        // Not fakes
+        private readonly IRepository<Product> _sutRepository;
+        private readonly UnitOfWork _unitOfWork;
+        private readonly RepositoryFactory _factory;
+        private readonly WebShopDbContext _dbContext;
+
+        public UnitOfWorkTests()
+        {
+
+
+            var options = new DbContextOptionsBuilder<WebShopDbContext>()
+            .UseInMemoryDatabase("TestDb")
+            .Options;
+
+            _dbContext = new WebShopDbContext(options);
+            _factory = new RepositoryFactory(_dbContext);
+            _unitOfWork = new UnitOfWork(_dbContext, _factory);
+            _sutRepository = new Repository<Product>(_dbContext);
+        }
+
+        #region Unit Of Work
+
+        [Fact]
+        public async Task GetProductRepository_WithValidParameters_ReturnsRepository()
+        {
+            // Arrange
+            A.CallTo(() => _fakeUow.Repository<Product>()).Returns(_fakeRepository);
+
+            // Act
+            var result = await _fakeUow.Repository<Product>();
+
+            // Assert
+            Assert.Equal(_fakeRepository, result);
+        }
+        #endregion
+
         [Fact]
         public void NotifyProductAdded_CallsObserverUpdate()
         {

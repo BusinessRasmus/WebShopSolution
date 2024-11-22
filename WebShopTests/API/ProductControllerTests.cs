@@ -2,6 +2,7 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Moq;
 using WebShop;
 using WebShop.Controllers;
@@ -10,8 +11,6 @@ using WebShop.DataAccess.Factory;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
-using WebShopTests.RepositoryTestData;
-
 public class ProductControllerTests
 {
     // Fakes
@@ -28,6 +27,7 @@ public class ProductControllerTests
     public ProductControllerTests()
     {
         _fakeController = new ProductController(_fakeUow);
+        //sut = new Repository<Product>(_fakeDbContext);
 
         var options = new DbContextOptionsBuilder<WebShopDbContext>()
             .UseInMemoryDatabase("TestDb")
@@ -298,65 +298,9 @@ public class ProductControllerTests
     }
     #endregion
 
-    #region Repository_GetById
-    [Fact]
-    public async Task GetById_WithValidInput_ReturnsProduct_FAKEITEASY()
-    {
-        // Arrange
-        var fakeProductRepo = await _fakeUow.Repository<Product>();
-        var dummyProduct = A.Dummy<Product>();
-        A.CallTo(() => fakeProductRepo.GetByIdAsync(2)).Returns(dummyProduct);
-
-        // Act
-        var result = await fakeProductRepo.GetByIdAsync(2);
-
-        // Assert
-        Assert.Equal(dummyProduct, result);
-        A.CallTo(() => fakeProductRepo.GetByIdAsync(2)).MustHaveHappenedOnceExactly();
-    }
-
-    [Theory]
-    [ClassData(typeof(RepositoryTestData))]
-    public async Task AddAsync_WithValidInput_ReturnsProduct(Product[] input)
-    {
-        var repo = await _unitOfWork.Repository<Product>();
-        // Arrange
-        foreach (var p in input)
-        {
-            // Act
-            await repo.AddAsync(p);
-            var result = await repo.GetByIdAsync(p.Id);
-
-            // Assert
-            Assert.Equal(p.Name, result.Name);
-        }
-
-        var b = await repo.GetAllAsync();
-        var c = b.ToList();
-        Assert.Equal(input.Length, c.Count);
-        
-    }
-
-    #endregion
-
-    #region Repository_AddAsync
-
-    #endregion
+  
 
 
 
-    #region Unit Of Work
-    [Fact]
-    public async Task GetProductRepository_WithValidParameters_ReturnsRepository()
-    {
-        // Arrange
-        A.CallTo(() => _fakeUow.Repository<Product>()).Returns(_fakeRepository);
-
-        // Act
-        var result = await _fakeUow.Repository<Product>();
-
-        // Assert
-        Assert.Equal(_fakeRepository, result);
-    }
-    #endregion
+    
 }

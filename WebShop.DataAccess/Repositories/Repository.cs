@@ -15,7 +15,8 @@ namespace WebShop.DataAccess.Repositories
 
         public async Task<IEnumerable<TE>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            var list = await _dbSet.ToListAsync();
+            return list;
         }
 
         public async Task<TE> GetByIdAsync(int id)
