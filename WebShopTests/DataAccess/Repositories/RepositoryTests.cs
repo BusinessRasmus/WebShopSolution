@@ -14,7 +14,7 @@ using WebShop.DataAccess.UnitOfWork;
 using WebShop.Shared.Models;
 using WebShopTests.TestData;
 
-namespace WebShopTests.DataAccess.RepositoryTests
+namespace WebShopTests.DataAccess.Repositories
 {
     public class RepositoryTests
     {
@@ -49,6 +49,8 @@ namespace WebShopTests.DataAccess.RepositoryTests
         [Fact]
         public async Task GetByIdAsync_WithValidInput_ReturnsProduct()
         {
+            await EnsureDatabaseDeletedAndCreated();
+
             // Arrange
             var repo = await _unitOfWork.Repository<Product>();
 
@@ -74,6 +76,8 @@ namespace WebShopTests.DataAccess.RepositoryTests
         [Fact]
         public async Task GetByIdAsync_WithInvalidInput_ReturnsNull()
         {
+            await EnsureDatabaseDeletedAndCreated();
+
             // Arrange
             var repo = await _unitOfWork.Repository<Product>();
 
@@ -91,7 +95,6 @@ namespace WebShopTests.DataAccess.RepositoryTests
 
             // Assert
             Assert.Null(result);
-            await _dbContext.Database.EnsureDeletedAsync();
         }
 
         #endregion
@@ -100,6 +103,8 @@ namespace WebShopTests.DataAccess.RepositoryTests
         [Fact]
         public async Task GetAllAsync_WithValidInput_ReturnsListOfProducts()
         {
+            await EnsureDatabaseDeletedAndCreated();
+
             // Arrange
             var repo = await _unitOfWork.Repository<Product>();
 
@@ -128,12 +133,13 @@ namespace WebShopTests.DataAccess.RepositoryTests
 
             // Assert
             Assert.Equal(2, result.Count());
-            await _dbContext.Database.EnsureDeletedAsync();
         }
 
         [Fact]
         public async Task GetAllAsync_WhenDbIsEmpty_ReturnsNull()
         {
+            await EnsureDatabaseDeletedAndCreated();
+
             // Arrange
             var repo = await _unitOfWork.Repository<Product>();
 
@@ -151,6 +157,8 @@ namespace WebShopTests.DataAccess.RepositoryTests
         [ClassData(typeof(RepositoryTestData))]
         public async Task AddAsync_GetAllAsync_WithValidInput_ReturnsListOfProducts(Product[] input)
         {
+            await EnsureDatabaseDeletedAndCreated();
+
             var repo = await _unitOfWork.Repository<Product>();
             // Arrange
             foreach (var p in input)
@@ -175,6 +183,8 @@ namespace WebShopTests.DataAccess.RepositoryTests
         [Fact]
         public async Task UpdateAsync_WithValidInput_ReturnsProduct()
         {
+            await EnsureDatabaseDeletedAndCreated();
+
             // Arrange
             var repo = await _unitOfWork.Repository<Product>();
 
@@ -199,7 +209,6 @@ namespace WebShopTests.DataAccess.RepositoryTests
 
             // Assert
             Assert.Equal(product.Name, result.Name);
-            await _dbContext.Database.EnsureDeletedAsync();
         }
         #endregion
 
@@ -207,6 +216,8 @@ namespace WebShopTests.DataAccess.RepositoryTests
         [Fact]
         public async Task DeleteAsync_WithValidInput_ReturnsNull()
         {
+            await EnsureDatabaseDeletedAndCreated();
+
             // Arrange
             var product = new Product
             {
@@ -227,12 +238,13 @@ namespace WebShopTests.DataAccess.RepositoryTests
 
             // Assert
             Assert.Null(result);
-            await _dbContext.Database.EnsureDeletedAsync();
         }
 
         [Fact]
         public async Task DeleteAsync_WithInvalidId_ReturnsProduct()
         {
+            await EnsureDatabaseDeletedAndCreated();
+
             // Arrange
             var product = new Product
             {
@@ -253,8 +265,13 @@ namespace WebShopTests.DataAccess.RepositoryTests
 
             // Assert
             Assert.Equal(product.Name, result.Name);
-            await _dbContext.Database.EnsureDeletedAsync();
         }
         #endregion
+
+        private async Task EnsureDatabaseDeletedAndCreated()
+        {
+            await _dbContext.Database.EnsureDeletedAsync();
+            await _dbContext.Database.EnsureCreatedAsync();
+        }
     }
 }

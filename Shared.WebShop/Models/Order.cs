@@ -11,8 +11,14 @@ namespace WebShop.Shared.Models
     public class Order : IModel
     {
         public int Id { get; set; }
-        public Customer Customer { get; set; }
+
+        [Required]
+        public required Customer Customer { get; set; }
+
+        [Required]
         public int CustomerId { get; set; }
+
+        [Required]
         public int Quantity { get; set; }
 
         [JsonIgnore]
