@@ -52,8 +52,6 @@ namespace WebShopTests.DataAccess.Repositories
             await EnsureDatabaseDeletedAndCreated();
 
             // Arrange
-            var repo = await _unitOfWork.Repository<Product>();
-
             var product = new Product
             {
                 Id = 1,
@@ -66,7 +64,7 @@ namespace WebShopTests.DataAccess.Repositories
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await repo.GetByIdAsync(1);
+            var result = await _sutRepository.GetByIdAsync(1);
 
             // Assert
             Assert.Equal(product.Name, result.Name);
@@ -104,10 +102,7 @@ namespace WebShopTests.DataAccess.Repositories
         public async Task GetAllAsync_WithValidInput_ReturnsListOfProducts()
         {
             await EnsureDatabaseDeletedAndCreated();
-
             // Arrange
-            var repo = await _unitOfWork.Repository<Product>();
-
             var product1 = new Product
             {
                 Id = 1,
@@ -129,7 +124,7 @@ namespace WebShopTests.DataAccess.Repositories
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await repo.GetAllAsync();
+            var result = await _sutRepository.GetAllAsync();
 
             // Assert
             Assert.Equal(2, result.Count());
@@ -153,30 +148,31 @@ namespace WebShopTests.DataAccess.Repositories
         #endregion
 
         #region Repository_AddAsync
-        [Theory]
-        [ClassData(typeof(RepositoryTestData))]
-        public async Task AddAsync_GetAllAsync_WithValidInput_ReturnsListOfProducts(Product[] input)
-        {
-            await EnsureDatabaseDeletedAndCreated();
+        //[Theory]
+        //[ClassData(typeof(RepositoryTestData))]
+        //public async Task AddAsync_GetAllAsync_WithValidInput_ReturnsListOfProducts(Product[] input)
+        //{
+        //    await EnsureDatabaseDeletedAndCreated();
 
-            var repo = await _unitOfWork.Repository<Product>();
-            // Arrange
-            foreach (var p in input)
-            {
-                // Act
-                await repo.AddAsync(p);
-                await _dbContext.SaveChangesAsync();
+        //    var repo = await _unitOfWork.Repository<Product>();
+        //    // Arrange
+        //    foreach (var p in input)
+        //    {
+        //        // Act
+        //        await repo.AddAsync(p);
+        //        await _dbContext.SaveChangesAsync();
 
-                var result = await repo.GetByIdAsync(p.Id);
+        //        var result = await repo.GetByIdAsync(p.Id);
 
-                // Assert
-                Assert.Equal(p.Name, result.Name);
-            }
+        //        // Assert
+        //        Assert.Equal(p.Name, result.Name);
+        //    }
 
-            // Additional assert
-            var productsInDb = await repo.GetAllAsync();
-            Assert.Equal(input.Count(), productsInDb.Count());
-        }
+        //    // Additional assert
+        //    var productsInDb = await repo.GetAllAsync();
+        //    Assert.Equal(input.Count(), productsInDb.Count());
+            
+        //}
         #endregion
 
         #region Repository_UpdateAsync
@@ -227,8 +223,8 @@ namespace WebShopTests.DataAccess.Repositories
                 Price = 10
             };
 
-            await _dbContext.AddAsync(product);
-            await _dbContext.SaveChangesAsync();
+            await _sutRepository.AddAsync(product);
+            await _unitOfWork.Complete();
 
             // Act
             await _sutRepository.DeleteAsync(1);

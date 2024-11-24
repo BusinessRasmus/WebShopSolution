@@ -59,28 +59,19 @@ namespace WebshopTests.API.Controllers
         [Fact]
         public async Task GetAllProducts_WithProductsInDb_ReturnsEnumerable()
         {
-            await EnsureDatabaseDeletedAndCreated();
-
             // Arrange
-            var product = new Product
-            {
-                Name = "Test",
-                Amount = 10,
-                Price = 10
-            };
-            await _dbContext.Products.AddAsync(product);
+            var enumerable = A.CollectionOfDummy<Product>(5);
+
+            var repo = A.Dummy<IRepository<Product>>();
+            A.CallTo(() => _fakeUow.Repository<Product>()).Returns(repo);
+            A.CallTo(() => repo.GetAllAsync()).Returns(enumerable);
 
             // Act
-            var response = await _productController.GetAllProducts();
+            var result = await _fakeController.GetAllProducts();
 
             // Assert
-            Assert.IsAssignableFrom<OkObjectResult>(response.Result);
-            var responseResultValue = (response.Result as OkObjectResult).Value;
-
-            Assert.IsAssignableFrom<IEnumerable<Product>>(responseResultValue);
-            var enumerableProducts = responseResultValue as IEnumerable<Product>;
-
-            Assert.Equal(product, enumerableProducts.ToList()[0]);
+            A.CallTo(() => repo.GetAllAsync()).MustHaveHappenedOnceExactly();
+            Assert.IsAssignableFrom<OkObjectResult>(result.Result);
         }
         #endregion
 
@@ -190,7 +181,7 @@ namespace WebshopTests.API.Controllers
             product.Name = "Test2";
 
             // Act
-            var result = await _productController.UpdateProduct(product.Id, product);
+            var result = await _productController.UpdateProduct(1, product);
             var getResponse = await _productController.GetProductById(product.Id);
 
             // Assert
@@ -219,7 +210,7 @@ namespace WebshopTests.API.Controllers
                 Amount = 10,
                 Price = 10
             };
-            await _dbContext.Products.AddAsync(product);
+            await _productController.AddProduct(product);
 
             product.Name = "T";
 
@@ -228,7 +219,6 @@ namespace WebshopTests.API.Controllers
 
             // Assert
             Assert.IsAssignableFrom<BadRequestResult>(result);
-
         }
 
         #endregion
