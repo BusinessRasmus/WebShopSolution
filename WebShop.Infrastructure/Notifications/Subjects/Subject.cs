@@ -9,6 +9,7 @@ using WebShop.Infrastructure.Notifications.Observers;
 
 namespace WebShop.Infrastructure.Notifications.Subjects
 {
+    // Generiskt subject som håller reda på observatörer och notifierar dem
     public class Subject<TEntity> : ISubject<TEntity> where TEntity : class
     {
         // Lista över registrerade observatörer
@@ -24,9 +25,8 @@ namespace WebShop.Infrastructure.Notifications.Subjects
             _observers.Remove(observer);
         }
 
-        public void Notify(TEntity product) //TODO Add abstraction here?
+        public void Notify(TEntity product)
         {
-            // Notifiera alla observatörer om en ny produkt
             foreach (var observer in _observers)
             {
                 observer.Update(product);

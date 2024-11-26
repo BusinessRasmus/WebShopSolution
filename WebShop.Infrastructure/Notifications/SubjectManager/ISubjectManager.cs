@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WebShop.Infrastructure.Notifications.Subjects;
 
-namespace WebShop.Infrastructure.Notifications.Factory
+namespace WebShop.Infrastructure.Notifications.SubjectManager
 {
-    public interface ISubjectFactory
+    public interface ISubjectManager
     {
-        public ISubject<TEntity> CreateSubject<TEntity>() where TEntity : class;
+        public ISubject<TEntity> Subject<TEntity>() where TEntity : class;
     }
 }

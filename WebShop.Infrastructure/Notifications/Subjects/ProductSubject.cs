@@ -3,10 +3,10 @@ using WebShop.Infrastructure.Notifications.Observers;
 
 namespace WebShop.Infrastructure.Notifications.Subjects
 {
-    // Subject som håller reda på observatörer och notifierar dem
+    // Subject för Products som håller reda på observatörer och notifierar dem
     public class ProductSubject : ISubject<Product>
     {
-        // Lista över registrerade observatörer
+        // Observers
         private readonly List<INotificationObserver<Product>> _observers = [];
 
         private static ProductSubject _productSubject;
@@ -32,9 +32,8 @@ namespace WebShop.Infrastructure.Notifications.Subjects
             _observers.Remove(observer);
         }
 
-        public void Notify(Product product) //TODO Add abstraction here?
+        public void Notify(Product product)
         {
-            // Notifiera alla observatörer om en ny produkt
             foreach (var observer in _observers)
             {
                 observer.Update(product);

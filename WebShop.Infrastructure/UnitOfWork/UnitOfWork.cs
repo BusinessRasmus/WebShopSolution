@@ -5,7 +5,7 @@ using WebShop.Infrastructure.Notifications.Subjects;
 using WebShop.Domain.Models;
 using WebShop.DataAccess.Repositories.Factory;
 
-namespace WebShop.DataAccess.UnitOfWork
+namespace WebShop.Infrastructure.UnitOfWork
 {
     public class UnitOfWork(WebShopDbContext context, IRepositoryFactory factory) : IUnitOfWork
     {

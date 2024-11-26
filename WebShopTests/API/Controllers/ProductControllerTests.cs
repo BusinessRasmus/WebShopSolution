@@ -9,8 +9,9 @@ using WebShop.Controllers;
 using WebShop.DataAccess.DataAccess;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.Repositories.Factory;
-using WebShop.DataAccess.UnitOfWork;
 using WebShop.Domain.Models;
+using WebShop.Infrastructure.Notifications.SubjectManager;
+using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebshopTests.API.Controllers
 {
@@ -19,6 +20,7 @@ namespace WebshopTests.API.Controllers
         // Fakes
         private readonly IUnitOfWork _fakeUow = A.Fake<IUnitOfWork>();
         private readonly IRepository<Product> _fakeRepository = A.Fake<IRepository<Product>>();
+        private readonly ISubjectManager _fakeSubjectManager = A.Fake<ISubjectManager>();
         private readonly ProductController _fakeController;
 
         // Not fakes
@@ -29,7 +31,7 @@ namespace WebshopTests.API.Controllers
 
         public ProductControllerTests()
         {
-            _fakeController = new ProductController(_fakeUow);
+            _fakeController = new ProductController(_fakeUow, _fakeSubjectManager);
             //sut = new Repository<Product>(_fakeDbContext);
 
             var options = new DbContextOptionsBuilder<WebShopDbContext>()
@@ -39,7 +41,7 @@ namespace WebshopTests.API.Controllers
             _dbContext = new WebShopDbContext(options);
             _factory = new RepositoryFactory(_dbContext);
             _unitOfWork = new UnitOfWork(_dbContext, _factory);
-            _productController = new ProductController(_unitOfWork);
+            _productController = new ProductController(_unitOfWork, _fakeSubjectManager);
         }
 
         #region GetAllProducts
@@ -76,6 +78,7 @@ namespace WebshopTests.API.Controllers
         #endregion
 
         #region GetProductById
+        [Fact]
         public async Task GetProductById_WithValidId_ReturnsProduct()
         {
             await EnsureDatabaseDeletedAndCreated();
@@ -103,6 +106,7 @@ namespace WebshopTests.API.Controllers
             Assert.Equal(product, productResult);
         }
 
+        [Fact]
         public async Task GetProductById_WithInvalidId_ReturnsNotFound()
         {
             await EnsureDatabaseDeletedAndCreated();

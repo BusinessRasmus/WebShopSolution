@@ -10,8 +10,8 @@ using WebShop.Controllers;
 using WebShop.DataAccess.DataAccess;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.Repositories.Factory;
-using WebShop.DataAccess.UnitOfWork;
 using WebShop.Domain.Models;
+using WebShop.Infrastructure.UnitOfWork;
 using WebShopTests.TestData;
 
 namespace WebShopTests.DataAccess.Repositories

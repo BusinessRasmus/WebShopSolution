@@ -5,10 +5,10 @@ using WebShop.Controllers;
 using WebShop.DataAccess.DataAccess;
 using WebShop.DataAccess.Repositories;
 using WebShop.DataAccess.Repositories.Factory;
-using WebShop.DataAccess.UnitOfWork;
 using WebShop.Domain.Models;
 using WebShop.Infrastructure.Notifications.Observers;
 using WebShop.Infrastructure.Notifications.Subjects;
+using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebShopTests.DataAccess
 {
