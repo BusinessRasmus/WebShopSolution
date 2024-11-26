@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebShop.DataAccess.Repositories;
 
-namespace WebShop.DataAccess.Factory
+namespace WebShop.DataAccess.Repositories.Factory
 {
     public interface IRepositoryFactory
     {

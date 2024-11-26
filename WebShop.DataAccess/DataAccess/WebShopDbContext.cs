@@ -1,13 +1,13 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using WebShop.Shared.Models;
+using WebShop.Domain.Models;
 
-namespace WebShop.DataAccess
+namespace WebShop.DataAccess.DataAccess
 {
     public class WebShopDbContext : DbContext
     {
         public WebShopDbContext(DbContextOptions<WebShopDbContext> options) : base(options)
-        {   
+        {
         }
 
         public DbSet<Product> Products { get; set; }

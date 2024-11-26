@@ -1,11 +1,12 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using WebShop.DataAccess;
-using WebShop.DataAccess.Factory;
+using WebShop.DataAccess.DataAccess;
+using WebShop.DataAccess.Repositories.Factory;
 using WebShop.DataAccess.UnitOfWork;
-using WebShop.Shared.Models;
-using WebShop.Shared.Notifications;
+using WebShop.Domain.Models;
+using WebShop.Infrastructure.Notifications.Observers;
+using WebShop.Infrastructure.Notifications.Subjects;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,8 @@ builder.Services.AddDbContext<WebShopDbContext>(options => options.UseSqlServer(
 builder.Services.AddControllers();
 // Registrera Unit of Work i DI-container
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddTransient<INotificationObserver<Product>, EmailNotification>();
-builder.Services.AddScoped<ISubject<Product>, ProductSubject>();
+builder.Services.AddTransient<INotificationObserver<Product>, EmailNotificationObserver>();
+builder.Services.AddSingleton<ISubject<Product>, ProductSubject>();
 builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

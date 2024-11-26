@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebShop.DataAccess.DataAccess;
 
 namespace WebShop.DataAccess.Repositories
 {

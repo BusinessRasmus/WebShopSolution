@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static WebShop.DataAccess.Factory.RepositoryFactory;
+using static WebShop.DataAccess.Repositories.Factory.RepositoryFactory;
 using WebShop.DataAccess.Repositories;
-using WebShop.Shared.Models;
+using WebShop.DataAccess.DataAccess;
+using WebShop.Domain.Models;
 
-namespace WebShop.DataAccess.Factory
+namespace WebShop.DataAccess.Repositories.Factory
 {
     public class RepositoryFactory(WebShopDbContext context) : IRepositoryFactory
     {
         public async Task<IRepository<TEntity>> CreateRepository<TEntity>() where TEntity : class
         {
-            //TODO Ta bort nedanstående. Endast om repositories finns med annan funktionalitet?
+            //Nedanstående utkommenterat kan användas i de fall vi behöver olika repositories för olika entiteter.
             //if (typeof(TEntity) == typeof(Product))
             //    return (IRepository<TEntity>)new ProductRepository(context);
 

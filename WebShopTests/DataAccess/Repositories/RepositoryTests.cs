@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebShop.Controllers;
-using WebShop.DataAccess;
-using WebShop.DataAccess.Factory;
+using WebShop.DataAccess.DataAccess;
 using WebShop.DataAccess.Repositories;
+using WebShop.DataAccess.Repositories.Factory;
 using WebShop.DataAccess.UnitOfWork;
-using WebShop.Shared.Models;
+using WebShop.Domain.Models;
 using WebShopTests.TestData;
 
 namespace WebShopTests.DataAccess.Repositories

@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
 using WebShop.DataAccess.UnitOfWork;
-using WebShop.Shared.Models;
+using WebShop.Domain.Models;
+using WebShop.Infrastructure.Notifications.Observers;
+using WebShop.Infrastructure.Notifications.Subjects;
 
 namespace WebShop.Controllers
 {
@@ -11,9 +13,14 @@ namespace WebShop.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ISubject<Product> _productSubject;
+        private readonly INotificationObserver<Product> _emailObserver;
+
         public ProductController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            //_productSubject = productSubject;
+            //_emailObserver = emailObserver;
         }
 
         [HttpGet]
@@ -55,9 +62,13 @@ namespace WebShop.Controllers
             var repository = await _unitOfWork.Repository<Product>();
             
             await repository.AddAsync(product);
-            await _unitOfWork.Complete();
+            //await _unitOfWork.Complete();
 
+            
+            //_productSubject.Attach(_emailObserver);
             //_unitOfWork.NotifyProductAdded(product);
+
+
             //TODO Lägg in notification här.
             // Notifierar observatörer om att en ny produkt har lagts till
 

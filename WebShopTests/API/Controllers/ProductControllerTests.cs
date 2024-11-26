@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Moq;
 using WebShop;
 using WebShop.Controllers;
-using WebShop.DataAccess;
-using WebShop.DataAccess.Factory;
+using WebShop.DataAccess.DataAccess;
 using WebShop.DataAccess.Repositories;
+using WebShop.DataAccess.Repositories.Factory;
 using WebShop.DataAccess.UnitOfWork;
-using WebShop.Shared.Models;
+using WebShop.Domain.Models;
 
 namespace WebshopTests.API.Controllers
 {
@@ -166,35 +166,22 @@ namespace WebshopTests.API.Controllers
         [Fact]
         public async Task UpdateProduct_WithValidInput_ReturnsOkResultAndMustHaveHappenedOnceExactly()
         {
-            await EnsureDatabaseDeletedAndCreated();
-
             // Arrange
-            var product = new Product
-            {
-                Id = 1,
-                Name = "Test",
-                Amount = 10,
-                Price = 10
-            };
-            await _dbContext.Products.AddAsync(product);
+            var productToSend = A.Dummy<Product>();
+            productToSend.Name = "Hejsan";
+            var repository = await _fakeUow.Repository<Product>();
 
-            product.Name = "Test2";
+            A.CallTo(() => _fakeUow.Repository<Product>()).Returns(repository);
+            A.CallTo(() => repository.UpdateAsync(productToSend)).DoesNothing();
 
             // Act
-            var result = await _productController.UpdateProduct(1, product);
-            var getResponse = await _productController.GetProductById(product.Id);
+            var result = await _fakeController.UpdateProduct(1, productToSend);
 
             // Assert
-            Assert.IsAssignableFrom<OkObjectResult>(getResponse.Result);
-            var getResponseValue = (getResponse.Result as OkObjectResult).Value;
-
-            Assert.IsAssignableFrom<Product>(getResponseValue);
-            var getResponseValueAsProduct = getResponseValue as Product;
-
-            Assert.NotEqual(getResponseValueAsProduct.Name, "Test");
-            Assert.True(getResponseValueAsProduct.Name == "Test2");
-            Assert.IsAssignableFrom<OkResult>(result);
-
+            A.CallTo(() => _fakeUow.Repository<Product>()).MustHaveHappened();
+            A.CallTo(() => _fakeUow.Complete()).MustHaveHappened();
+            A.CallTo(() => repository.UpdateAsync(productToSend)).MustHaveHappened();
+            Assert.True(result is OkResult);
         }
 
         [Fact]

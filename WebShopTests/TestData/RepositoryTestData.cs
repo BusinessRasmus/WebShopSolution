@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebShop.Shared.Models;
+﻿using System.Collections;
+using WebShop.Domain.Models;
 
 namespace WebShopTests.TestData
 {

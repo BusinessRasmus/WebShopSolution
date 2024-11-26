@@ -1,7 +1,6 @@
-﻿
-using WebShop.Shared.Models;
+﻿using WebShop.Shared.Models;
 
-namespace WebShop.Shared.Notifications
+namespace WebShop.Shared.Notifications.Observers
 {
     // En konkret observatör som skickar e-postmeddelanden
     public class EmailNotificationObserver : INotificationObserver<Product>

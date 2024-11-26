@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebShop.Shared.Models;
+﻿using WebShop.Domain.Models;
 
-namespace WebShop.Shared.Notifications
+namespace WebShop.Infrastructure.Notifications.Observers
 {
     public class TextMessageNotificationObserver : INotificationObserver<Product>
     {
