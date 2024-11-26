@@ -11,8 +11,8 @@ using WebShop.DataAccess;
 namespace WebShop.DataAccess.Migrations
 {
     [DbContext(typeof(WebShopDbContext))]
-    [Migration("20241118170218_init")]
-    partial class init
+    [Migration("20241126093530_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -57,6 +57,7 @@ namespace WebShop.Controllers
             await repository.AddAsync(product);
             await _unitOfWork.Complete();
 
+            //_unitOfWork.NotifyProductAdded(product);
             //TODO Lägg in notification här.
             // Notifierar observatörer om att en ny produkt har lagts till
 

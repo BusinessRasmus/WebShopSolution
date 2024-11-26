@@ -10,7 +10,7 @@ namespace WebShop.DataAccess.UnitOfWork
         Task Complete();
 
         Task<IRepository<TEntity>> Repository<TEntity>() where TEntity : class;
-
+        
         void NotifyProductAdded(Product product); // Notifierar observatörer om ny produkt
     }
 }

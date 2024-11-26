@@ -1,116 +1,119 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using System.ComponentModel.DataAnnotations;
-using WebShop.DataAccess.Repositories;
-using WebShop.DataAccess.UnitOfWork;
-using WebShop.Shared.Models;
+﻿//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.Identity.Client;
+//using System.ComponentModel.DataAnnotations;
+//using WebShop.DataAccess.Repositories;
+//using WebShop.DataAccess.UnitOfWork;
+//using WebShop.Shared.Models;
+//using WebShop.Shared.Notifications;
 
-namespace WebShop.Controllers
-{
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CustomerController : ControllerBase
-    {
+//namespace WebShop.Controllers
+//{
+//    [ApiController]
+//    [Route("api/[controller]")]
+//    public class CustomerController : ControllerBase
+//    {
 
-        private readonly IUnitOfWork _unitOfWork;
+//        private readonly IUnitOfWork _unitOfWork;
 
-        public CustomerController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+//        public CustomerController(IUnitOfWork unitOfWork)
+//        {
+//            _unitOfWork = unitOfWork;
+//        }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetAllCustomers()
-        {
-            var repository = await _unitOfWork.Repository<Customer>();
-            var customers = await repository.GetAllAsync();
+//        [HttpGet]
+//        public async Task<ActionResult<IEnumerable<Customer>>> GetAllCustomers()
+//        {
+//            var repository = await _unitOfWork.Repository<Customer>();
+//            var customers = await repository.GetAllAsync();
 
-            if (!customers.Any())
-                return NotFound(Enumerable.Empty<Customer>());
+//            if (!customers.Any())
+//                return NotFound(Enumerable.Empty<Customer>());
 
-            return Ok(customers);
-        }
+//            return Ok(customers);
+//        }
 
-        // Endpoint för att hämta alla produkter
-        [HttpGet]
-        public async Task<ActionResult<Customer>> GetCustomerById(int id)
-        {
-            var repository = await _unitOfWork.Repository<Customer>();
-            var customer = await repository.GetByIdAsync(id);
+//        // Endpoint för att hämta alla produkter
+//        [HttpGet]
+//        public async Task<ActionResult<Customer>> GetCustomerById(int id)
+//        {
+//            var repository = await _unitOfWork.Repository<Customer>();
+//            var customer = await repository.GetByIdAsync(id);
 
-            if (customer is null)
-            {
-                return NotFound($"No customer with id {id} was found.");
-            }
+//            ProductSubject productSubject = new ProductSubject();
 
-            return Ok(customer);
-        }
+//            if (customer is null)
+//            {
+//                return NotFound($"No customer with id {id} was found.");
+//            }
 
-        // Endpoint för att lägga till en ny produkt
-        [HttpPost]
-        public async Task<ActionResult> AddCustomer(Customer customer)
-        {
-            if (customer.FirstName.Contains('<'))
-            {
-                return BadRequest("Forbidden characters in request");
-            }
+//            return Ok(customer);
+//        }
 
-            try
-            {
-                var repository = await _unitOfWork.Repository<Customer>();
-                await repository.AddAsync(customer);
-                await _unitOfWork.Complete();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, $"Internal server error: {e.Message}");
-            }
-            return Ok();
-        }
+//        // Endpoint för att lägga till en ny produkt
+//        [HttpPost]
+//        public async Task<ActionResult> AddCustomer(Customer customer)
+//        {
+//            if (customer.FirstName.Contains('<'))
+//            {
+//                return BadRequest("Forbidden characters in request");
+//            }
 
-        [HttpPatch]
-        [Route("{id}")]
-        public async Task<ActionResult> UpdateCustomer([FromRoute] int id, [FromBody] Customer customer)
-        {
-            if (!Validator.TryValidateObject(customer, new ValidationContext(customer), null, true))
-            {
-                return BadRequest();
-            }
+//            try
+//            {
+//                var repository = await _unitOfWork.Repository<Customer>();
+//                await repository.AddAsync(customer);
+//                await _unitOfWork.Complete();
+//            }
+//            catch (Exception e)
+//            {
+//                return StatusCode(500, $"Internal server error: {e.Message}");
+//            }
+//            return Ok();
+//        }
 
-            if (customer is null)
-                return BadRequest();
+//        [HttpPatch]
+//        [Route("{id}")]
+//        public async Task<ActionResult> UpdateCustomer([FromRoute] int id, [FromBody] Customer customer)
+//        {
+//            if (!Validator.TryValidateObject(customer, new ValidationContext(customer), null, true))
+//            {
+//                return BadRequest();
+//            }
 
-            var repository = await _unitOfWork.Repository<Customer>();
+//            if (customer is null)
+//                return BadRequest();
 
-            await repository.UpdateAsync(customer);
-            await _unitOfWork.Complete();
+//            var repository = await _unitOfWork.Repository<Customer>();
 
-            return Ok();
-        }
+//            await repository.UpdateAsync(customer);
+//            await _unitOfWork.Complete();
 
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<ActionResult> DeleteCustomer([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest();
+//            return Ok();
+//        }
 
-            var customerToDelete = await _unitOfWork.Repository<Customer>().Result.GetByIdAsync(id);
+//        [HttpDelete]
+//        [Route("{id}")]
+//        public async Task<ActionResult> DeleteCustomer([FromRoute] int id)
+//        {
+//            if (!ModelState.IsValid)
+//                return BadRequest();
 
-            if (customerToDelete is null)
-                return NotFound($"No customer with id {id} was found.");
+//            var customerToDelete = await _unitOfWork.Repository<Customer>().Result.GetByIdAsync(id);
 
-            try
-            {
-                await _unitOfWork.Repository<Customer>().Result.DeleteAsync(customerToDelete.Id);
-                await _unitOfWork.Complete();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, $"Internal server error: {e.Message}");
-            }
+//            if (customerToDelete is null)
+//                return NotFound($"No customer with id {id} was found.");
 
-            return Ok();
-        }
-    }
-}
+//            try
+//            {
+//                await _unitOfWork.Repository<Customer>().Result.DeleteAsync(customerToDelete.Id);
+//                await _unitOfWork.Complete();
+//            }
+//            catch (Exception e)
+//            {
+//                return StatusCode(500, $"Internal server error: {e.Message}");
+//            }
+
+//            return Ok();
+//        }
+//    }
+//}

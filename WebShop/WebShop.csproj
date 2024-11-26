@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared.WebShop\WebShop.Shared.csproj" />
     <ProjectReference Include="..\WebShop.DataAccess\WebShop.DataAccess.csproj" />
   </ItemGroup>
 

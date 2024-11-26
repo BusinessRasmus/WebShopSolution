@@ -14,43 +14,35 @@ namespace WebShopTests.Tests
     public class UnitOfWorkTests
     {
         // Fakes
-        private readonly IUnitOfWork _fakeUow = A.Fake<IUnitOfWork>();
-        private readonly IRepository<Product> _fakeRepository = A.Fake<IRepository<Product>>();
-        private readonly ProductController _fakeController;
-
-        // Not fakes
-        private readonly IRepository<Product> _sutRepository;
-        private readonly UnitOfWork _unitOfWork;
-        private readonly RepositoryFactory _factory;
-        private readonly WebShopDbContext _dbContext;
+        private readonly IRepositoryFactory _factory = A.Fake<IRepositoryFactory>();
+        private readonly WebShopDbContext _context;
+        private readonly UnitOfWork _uow;
 
         public UnitOfWorkTests()
         {
-
-
-            var options = new DbContextOptionsBuilder<WebShopDbContext>()
-            .UseInMemoryDatabase("TestDb")
-            .Options;
-
-            _dbContext = new WebShopDbContext(options);
-            _factory = new RepositoryFactory(_dbContext);
-            _unitOfWork = new UnitOfWork(_dbContext, _factory);
-            _sutRepository = new Repository<Product>(_dbContext);
+            _context = A.Fake<WebShopDbContext>();
+            _uow = new UnitOfWork(_context, _factory);
         }
 
         #region Unit Of Work
-
         [Fact]
         public async Task GetProductRepository_WithValidParameters_ReturnsRepository()
         {
-            // Arrange
-            A.CallTo(() => _fakeUow.Repository<Product>()).Returns(_fakeRepository);
-
             // Act
-            var result = await _fakeUow.Repository<Product>();
+            var result = await _uow.Repository<Product>();
 
             // Assert
-            Assert.Equal(_fakeRepository, result);
+            Assert.IsAssignableFrom<IRepository<Product>>(result);
+        }
+
+        [Fact]
+        public async Task GetProductRepository_WithCustomerClass_ReturnsCustomerRepository()
+        {
+            // Act
+            var result = await _uow.Repository<Product>();
+
+            // Assert
+            Assert.IsAssignableFrom<IRepository<Product>>(result);
         }
         #endregion
 
@@ -64,7 +56,7 @@ namespace WebShopTests.Tests
             var product = A.Dummy<Product>();
 
             // Skapar en mock av INotificationObserver
-            var fakeObserver = A.Fake<INotificationObserver>();
+            var fakeObserver = A.Fake<INotificationObserver<Product>>();
 
             // Skapar en instans av ProductSubject och lägger till mock-observatören
             var productSubject = new ProductSubject();

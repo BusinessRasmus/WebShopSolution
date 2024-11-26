@@ -176,7 +176,7 @@ namespace WebshopTests.API.Controllers
                 Amount = 10,
                 Price = 10
             };
-            await _productController.AddProduct(product);
+            await _dbContext.Products.AddAsync(product);
 
             product.Name = "Test2";
 
