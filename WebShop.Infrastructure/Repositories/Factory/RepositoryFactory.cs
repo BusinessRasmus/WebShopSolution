@@ -13,7 +13,7 @@ namespace WebShop.DataAccess.Repositories.Factory
 {
     public class RepositoryFactory(WebShopDbContext context) : IRepositoryFactory
     {
-        public async Task<IRepository<TEntity>> CreateRepository<TEntity>() where TEntity : class
+        public IRepository<TEntity> CreateRepository<TEntity>() where TEntity : class
         {
             //Nedanstående utkommenterat kan användas i de fall vi behöver olika repositories för olika entiteter.
             //if (typeof(TEntity) == typeof(Product))

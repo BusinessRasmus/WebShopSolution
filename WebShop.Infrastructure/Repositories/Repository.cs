@@ -35,7 +35,7 @@ namespace WebShop.DataAccess.Repositories
             await _dbSet.AddAsync(item);
         }
 
-        public async Task UpdateAsync(TE entity) => _dbSet.Update(entity);
+        public void Update(TE entity) => _dbSet.Update(entity);
 
         public async Task DeleteAsync(int id)
         {

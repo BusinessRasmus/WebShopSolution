@@ -9,7 +9,7 @@ namespace WebShop.Infrastructure.UnitOfWork
 {
     public class UnitOfWork(WebShopDbContext context, IRepositoryFactory factory) : IUnitOfWork
     {
-        public async Task Complete()
+        public async Task CompleteAsync()
         {
             await context.SaveChangesAsync();
         }
@@ -19,9 +19,9 @@ namespace WebShop.Infrastructure.UnitOfWork
             await context.DisposeAsync();
         }
 
-        public async Task<IRepository<TEntity>> Repository<TEntity>() where TEntity : class
+        public  IRepository<TEntity> Repository<TEntity>() where TEntity : class
         {
-            var repository = await factory.CreateRepository<TEntity>();
+            var repository = factory.CreateRepository<TEntity>();
             return repository;
         }
     }

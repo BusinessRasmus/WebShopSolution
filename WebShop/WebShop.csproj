@@ -8,11 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="Docker.DotNet" Version="3.125.15" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 

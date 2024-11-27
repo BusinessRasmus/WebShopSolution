@@ -35,7 +35,7 @@ namespace WebshopTests.API.Controllers
             //sut = new Repository<Product>(_fakeDbContext);
 
             var options = new DbContextOptionsBuilder<WebShopDbContext>()
-                .UseInMemoryDatabase("TestDb")
+                .UseInMemoryDatabase("TestDbProductController")
                 .Options;
 
             _dbContext = new WebShopDbContext(options);
@@ -173,7 +173,7 @@ namespace WebshopTests.API.Controllers
             // Arrange
             var productToSend = A.Dummy<Product>();
             productToSend.Name = "Hejsan";
-            var repository = await _fakeUow.Repository<Product>();
+            var repository = _fakeUow.Repository<Product>();
 
             A.CallTo(() => _fakeUow.Repository<Product>()).Returns(repository);
             A.CallTo(() => repository.UpdateAsync(productToSend)).DoesNothing();
@@ -183,7 +183,7 @@ namespace WebshopTests.API.Controllers
 
             // Assert
             A.CallTo(() => _fakeUow.Repository<Product>()).MustHaveHappened();
-            A.CallTo(() => _fakeUow.Complete()).MustHaveHappened();
+            A.CallTo(() => _fakeUow.CompleteAsync()).MustHaveHappened();
             A.CallTo(() => repository.UpdateAsync(productToSend)).MustHaveHappened();
             Assert.True(result is OkResult);
         }
@@ -263,7 +263,7 @@ namespace WebshopTests.API.Controllers
             // Assert
             Assert.IsType<OkResult>(result);
             A.CallTo(() => _fakeRepository.DeleteAsync(productToDelete.Id)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _fakeUow.Complete()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _fakeUow.CompleteAsync()).MustHaveHappenedOnceExactly();
         }
         #endregion
 

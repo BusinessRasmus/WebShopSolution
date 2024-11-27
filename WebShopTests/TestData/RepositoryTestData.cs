@@ -15,7 +15,7 @@ namespace WebShopTests.TestData
                 new Product { Name = "Test", Amount = 10, Price = 25 },
                 new Product { Name = "Test2", Amount = 5, Price = 19.80 },
                 new Product { Name = "Test3", Amount = 15, Price = 9.80 },
-                new Product { Name = "Test4", Amount = 20, Price = 39.80 },
+                new Product { Name = "Test4", Amount = 20, Price = 39.80 }
                 }
             };
         }

@@ -13,7 +13,7 @@ using WebShop.Infrastructure.UnitOfWork;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionsString = builder.Configuration.GetConnectionString("WebShopDb");
+var connectionsString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<WebShopDbContext>(options => options.UseSqlServer(connectionsString));
 
 builder.Services.AddControllers();
@@ -21,12 +21,12 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ISubjectManager, SubjectManager>();
 
-
 builder.Services.AddSingleton<ISubject<Product>, ProductSubject>();
 
-builder.Services.AddTransient<INotificationObserver<Product>, EmailSenderObserver>();
-builder.Services.AddTransient<INotificationObserver<Product>, TextMessageSenderObserver>();
-builder.Services.AddTransient<INotificationObserver<Product>, PushMessageSenderObserver>();
+//TODO TAAAAA bort?
+//builder.Services.AddTransient<INotificationObserver<Product>, EmailSenderObserver>();
+//builder.Services.AddTransient<INotificationObserver<Product>, TextMessageSenderObserver>();
+//builder.Services.AddTransient<INotificationObserver<Product>, PushMessageSenderObserver>();
 
 builder.Services.AddTransient<IRepositoryFactory, RepositoryFactory>();
 builder.Services.AddTransient<ISubjectFactory, SubjectFactory>();
@@ -37,6 +37,12 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<WebShopDbContext>();
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())

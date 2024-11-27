@@ -6,9 +6,9 @@ namespace WebShop.Infrastructure.UnitOfWork
     // Gränssnitt för Unit of Work
     public interface IUnitOfWork : IDisposable
     {
-        Task Complete();
+        Task CompleteAsync();
 
-        Task<IRepository<TEntity>> Repository<TEntity>() where TEntity : class;
+        public IRepository<TEntity> Repository<TEntity>() where TEntity : class;
     }
 }
 

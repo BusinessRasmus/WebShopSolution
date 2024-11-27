@@ -25,7 +25,7 @@ namespace WebShop.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
-            var repository = await _unitOfWork.Repository<Product>();
+            var repository = _unitOfWork.Repository<Product>();
             var products = await repository.GetAllAsync();
 
             if (!products.Any())
@@ -38,7 +38,7 @@ namespace WebShop.Controllers
         [Route("{id}")]
         public async Task<ActionResult<IEnumerable<Product>>> GetProductById([FromRoute] int id)
         {
-            var repository = await _unitOfWork.Repository<Product>();
+            var repository = _unitOfWork.Repository<Product>();
             var product = await repository.GetByIdAsync(id);
 
             if (product is null)
@@ -58,12 +58,11 @@ namespace WebShop.Controllers
             if (product is null)
                 return BadRequest();
 
-            var repository = await _unitOfWork.Repository<Product>();
+            var repository = _unitOfWork.Repository<Product>();
             
             await repository.AddAsync(product);
-            //await _unitOfWork.Complete();
+            await _unitOfWork.CompleteAsync();
 
-            //TODO Tester för dessa?
             var subject = _subjectManager.Subject<Product>();
             subject.Attach(new EmailSenderObserver());
             subject.Attach(new TextMessageSenderObserver());
@@ -86,10 +85,10 @@ namespace WebShop.Controllers
             if (product is null)
                 return BadRequest();
 
-            var repository = await _unitOfWork.Repository<Product>();
+            var repository = _unitOfWork.Repository<Product>();
 
-            await repository.UpdateAsync(product);
-            await _unitOfWork.Complete();
+            repository.Update(product);
+            await _unitOfWork.CompleteAsync();
 
             return Ok();
         }
@@ -101,15 +100,15 @@ namespace WebShop.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var productToDelete = await _unitOfWork.Repository<Product>().Result.GetByIdAsync(id);
+            var productToDelete = _unitOfWork.Repository<Product>().GetByIdAsync(id);
 
             if (productToDelete is null)
                 return NotFound($"No product with id {id} was found.");
 
             try
             {
-                await _unitOfWork.Repository<Product>().Result.DeleteAsync(productToDelete.Id);
-                await _unitOfWork.Complete();
+                await _unitOfWork.Repository<Product>().DeleteAsync(productToDelete.Id);
+                await _unitOfWork.CompleteAsync();
             }
             catch (Exception e)
             {

@@ -9,7 +9,7 @@ namespace WebShop.DataAccess.Repositories.Factory
 {
     public interface IRepositoryFactory
     {
-        Task<IRepository<TEntity>> CreateRepository<TEntity>() where TEntity : class;
+        public IRepository<TEntity> CreateRepository<TEntity>() where TEntity : class;
     }
 
 }

@@ -14,29 +14,19 @@ using WebShop.Domain.Models;
 using WebShop.Infrastructure.UnitOfWork;
 using WebShopTests.TestData;
 
-namespace WebShopTests.DataAccess.Repositories
+namespace WebShopTests.Infrastructure.Repositories.Tests
 {
     public class RepositoryTests
     {
-        // Not fakes
         private readonly IRepository<Product> _sutRepository;
         private readonly UnitOfWork _unitOfWork;
         private readonly RepositoryFactory _factory;
         private readonly WebShopDbContext _dbContext;
 
-        //TODO Ta bort skiten eller refaktorera
-        //private readonly DbContextOptions<WebShopDbContext> fakeOptions = A.Fake<DbContextOptions<WebShopDbContext>>();
-        //private readonly WebShopDbContext _fakeDbContext;
-        //private readonly IRepository<Product> _fakeRepository;
-
-
         public RepositoryTests()
         {
-            //_fakeDbContext = new WebShopDbContext(fakeOptions);
-            //_fakeRepository = new Repository<Product>(_fakeDbContext);
-
             var options = new DbContextOptionsBuilder<WebShopDbContext>()
-            .UseInMemoryDatabase("TestDb")
+            .UseInMemoryDatabase("TestDbRepository")
             .Options;
 
             _dbContext = new WebShopDbContext(options);
@@ -49,9 +39,8 @@ namespace WebShopTests.DataAccess.Repositories
         [Fact]
         public async Task GetByIdAsync_WithValidInput_ReturnsProduct()
         {
-            await EnsureDatabaseDeletedAndCreated();
-
             // Arrange
+            await EnsureDatabaseDeletedAndCreated();
             var product = new Product
             {
                 Id = 1,
@@ -74,10 +63,9 @@ namespace WebShopTests.DataAccess.Repositories
         [Fact]
         public async Task GetByIdAsync_WithInvalidInput_ReturnsNull()
         {
-            await EnsureDatabaseDeletedAndCreated();
-
             // Arrange
-            var repo = await _unitOfWork.Repository<Product>();
+            await EnsureDatabaseDeletedAndCreated();
+            var repo = _unitOfWork.Repository<Product>();
 
             var product = new Product
             {
@@ -133,10 +121,9 @@ namespace WebShopTests.DataAccess.Repositories
         [Fact]
         public async Task GetAllAsync_WhenDbIsEmpty_ReturnsNull()
         {
+            // Arrange            
             await EnsureDatabaseDeletedAndCreated();
-
-            // Arrange
-            var repo = await _unitOfWork.Repository<Product>();
+            var repo = _unitOfWork.Repository<Product>();
 
             // Act
             var result = await repo.GetAllAsync();
@@ -148,31 +135,31 @@ namespace WebShopTests.DataAccess.Repositories
         #endregion
 
         #region Repository_AddAsync
-        //[Theory]
-        //[ClassData(typeof(RepositoryTestData))]
-        //public async Task AddAsync_GetAllAsync_WithValidInput_ReturnsListOfProducts(Product[] input)
-        //{
-        //    await EnsureDatabaseDeletedAndCreated();
+        [Theory]
+        [ClassData(typeof(RepositoryTestData))]
+        public async Task AddAsync_GetAllAsync_WithValidInput_ReturnsListOfProducts(Product[] input)
+        {
+            // Arrange
+            await EnsureDatabaseDeletedAndCreated();
+            var repo = _unitOfWork.Repository<Product>();
 
-        //    var repo = await _unitOfWork.Repository<Product>();
-        //    // Arrange
-        //    foreach (var p in input)
-        //    {
-        //        // Act
-        //        await repo.AddAsync(p);
-        //        await _dbContext.SaveChangesAsync();
+            foreach (var p in input)
+            {
+                // Act
+                await repo.AddAsync(p);
+                await _dbContext.SaveChangesAsync();
 
-        //        var result = await repo.GetByIdAsync(p.Id);
+                var result = await repo.GetByIdAsync(p.Id);
 
-        //        // Assert
-        //        Assert.Equal(p.Name, result.Name);
-        //    }
+                // Assert
+                Assert.Equal(p.Name, result.Name);
+            }
 
-        //    // Additional assert
-        //    var productsInDb = await repo.GetAllAsync();
-        //    Assert.Equal(input.Count(), productsInDb.Count());
-            
-        //}
+            // Additional assert
+            var productsInDb = await repo.GetAllAsync();
+            Assert.Equal(input.Count(), productsInDb.Count());
+
+        }
         #endregion
 
         #region Repository_UpdateAsync
@@ -182,7 +169,7 @@ namespace WebShopTests.DataAccess.Repositories
             await EnsureDatabaseDeletedAndCreated();
 
             // Arrange
-            var repo = await _unitOfWork.Repository<Product>();
+            var repo = _unitOfWork.Repository<Product>();
 
             var product = new Product
             {
@@ -198,7 +185,7 @@ namespace WebShopTests.DataAccess.Repositories
             product.Name = "Test2";
 
             // Act
-            await repo.UpdateAsync(product);
+            repo.Update(product);
             await _dbContext.SaveChangesAsync();
 
             var result = await repo.GetByIdAsync(1);
@@ -224,7 +211,7 @@ namespace WebShopTests.DataAccess.Repositories
             };
 
             await _sutRepository.AddAsync(product);
-            await _unitOfWork.Complete();
+            await _unitOfWork.CompleteAsync();
 
             // Act
             await _sutRepository.DeleteAsync(1);
