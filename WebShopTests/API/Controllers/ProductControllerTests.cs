@@ -176,7 +176,7 @@ namespace WebshopTests.API.Controllers
             var repository = _fakeUow.Repository<Product>();
 
             A.CallTo(() => _fakeUow.Repository<Product>()).Returns(repository);
-            A.CallTo(() => repository.UpdateAsync(productToSend)).DoesNothing();
+            A.CallTo(() => repository.Update(productToSend)).DoesNothing();
 
             // Act
             var result = await _fakeController.UpdateProduct(1, productToSend);
@@ -184,7 +184,7 @@ namespace WebshopTests.API.Controllers
             // Assert
             A.CallTo(() => _fakeUow.Repository<Product>()).MustHaveHappened();
             A.CallTo(() => _fakeUow.CompleteAsync()).MustHaveHappened();
-            A.CallTo(() => repository.UpdateAsync(productToSend)).MustHaveHappened();
+            A.CallTo(() => repository.Update(productToSend)).MustHaveHappened();
             Assert.True(result is OkResult);
         }
 

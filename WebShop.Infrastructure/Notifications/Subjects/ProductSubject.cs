@@ -9,7 +9,7 @@ namespace WebShop.Infrastructure.Notifications.Subjects
         // Observers
         private readonly List<INotificationObserver<Product>> _observers = [];
 
-        private static ProductSubject _productSubject;
+        private static ProductSubject? _productSubject;
 
         public static ProductSubject Instance
         {
