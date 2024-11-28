@@ -1,14 +1,7 @@
 ﻿using FakeItEasy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebShop.DataAccess.Repositories.Factory;
 using WebShop.Domain.Models;
 using WebShop.Infrastructure.Notifications.Observers;
 using WebShop.Infrastructure.Notifications.Subjects;
-using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebShopTests.Infrastructure.Notifications.Tests
 {
@@ -26,11 +19,12 @@ namespace WebShopTests.Infrastructure.Notifications.Tests
         public void Notify_MustCallObserverUpdateOnceExactly()
         {
             // Arrange
+            var product = A.Dummy<Product>();
             var fakeObserver = A.Fake<INotificationObserver<Product>>();
             _subject.Attach(fakeObserver);
 
             // Act
-            _subject.Notify(new Product());
+            _subject.Notify(product);
 
             // Assert
             A.CallTo(() => fakeObserver.Update(A<Product>._)).MustHaveHappenedOnceExactly();
@@ -40,13 +34,14 @@ namespace WebShopTests.Infrastructure.Notifications.Tests
         public void Attach_MustCallEachObserverUpdateOnceExactly()
         {
             // Arrange
+            var product = A.Dummy<Product>();
             var fakeObserverOne = A.Fake<INotificationObserver<Product>>();
             var fakeObserverTwo = A.Fake<INotificationObserver<Product>>();
             _subject.Attach(fakeObserverOne);
             _subject.Attach(fakeObserverTwo);
 
             // Act
-            _subject.Notify(new Product());
+            _subject.Notify(product);
 
             // Assert
             A.CallTo(() => fakeObserverOne.Update(A<Product>._)).MustHaveHappenedOnceExactly();
@@ -57,6 +52,7 @@ namespace WebShopTests.Infrastructure.Notifications.Tests
         public void Detach_MustCallOneObserverUpdateOnceExactly()
         {
             // Arrange
+            var product = A.Dummy<Product>();
             var fakeObserverOne = A.Fake<INotificationObserver<Product>>();
             var fakeObserverTwo = A.Fake<INotificationObserver<Product>>();
             _subject.Attach(fakeObserverOne);
@@ -66,7 +62,7 @@ namespace WebShopTests.Infrastructure.Notifications.Tests
             _subject.Detach(fakeObserverTwo);
 
             // Act
-            _subject.Notify(new Product());
+            _subject.Notify(product);
 
             // Assert
             A.CallTo(() => fakeObserverOne.Update(A<Product>._)).MustHaveHappenedOnceExactly();

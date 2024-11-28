@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
 using WebShop.Domain.Models;
 using WebShop.Infrastructure.Notifications.Observers;
 using WebShop.Infrastructure.Notifications.SubjectManager;
-using WebShop.Infrastructure.Notifications.Subjects;
 using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebShop.Controllers
@@ -42,7 +40,7 @@ namespace WebShop.Controllers
             var product = await repository.GetByIdAsync(id);
 
             if (product is null)
-                return NotFound($"No products were found.");
+                return NotFound($"No product with id {id} was found.");
 
             return Ok(product);
         }
@@ -59,8 +57,8 @@ namespace WebShop.Controllers
                 return BadRequest();
 
             var repository = _unitOfWork.Repository<Product>();
-            
             await repository.AddAsync(product);
+
             await _unitOfWork.CompleteAsync();
 
             var subject = _subjectManager.Subject<Product>();
@@ -86,8 +84,8 @@ namespace WebShop.Controllers
                 return BadRequest();
 
             var repository = _unitOfWork.Repository<Product>();
-
             repository.Update(product);
+
             await _unitOfWork.CompleteAsync();
 
             return Ok();
@@ -100,14 +98,15 @@ namespace WebShop.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var productToDelete = _unitOfWork.Repository<Product>().GetByIdAsync(id);
+            var repo = _unitOfWork.Repository<Product>();
+            var productToDelete = await repo.GetByIdAsync(id);
 
             if (productToDelete is null)
                 return NotFound($"No product with id {id} was found.");
 
             try
             {
-                await _unitOfWork.Repository<Product>().DeleteAsync(productToDelete.Id);
+                await repo.DeleteAsync(productToDelete.Id);
                 await _unitOfWork.CompleteAsync();
             }
             catch (Exception e)

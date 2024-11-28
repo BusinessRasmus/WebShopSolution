@@ -10,7 +10,7 @@ namespace WebShop.Domain.Models
 
         [Required]
         [Length(2, 30)]
-        public string Name { get; set; } // Namn på produkten
+        public required string Name { get; set; } // Namn på produkten
 
         [Required]
         [Range(0, double.MaxValue)]
@@ -18,8 +18,8 @@ namespace WebShop.Domain.Models
 
         [Required]
         [Range(0, int.MaxValue)]
-        public int Amount { get; set; }
+        public int Stock { get; set; }
 
-        public ICollection<OrderItem> OrderProducts { get; set; } = new List<OrderItem>();
+        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }

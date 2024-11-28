@@ -1,5 +1,4 @@
-﻿using WebShop.DataAccess.Repositories;
-using WebShop.Domain.Models;
+﻿using WebShop.Infrastructure.Repositories;
 
 namespace WebShop.Infrastructure.UnitOfWork
 {

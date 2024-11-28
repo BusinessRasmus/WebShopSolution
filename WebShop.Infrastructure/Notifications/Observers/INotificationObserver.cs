@@ -1,6 +1,4 @@
-﻿using WebShop.Domain.Interfaces;
-
-namespace WebShop.Infrastructure.Notifications.Observers
+﻿namespace WebShop.Infrastructure.Notifications.Observers
 {
     public interface INotificationObserver<T> where T : class
     {

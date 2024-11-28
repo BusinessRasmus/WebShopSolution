@@ -1,16 +1,8 @@
-﻿using FakeItEasy;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebShop.Controllers;
-using WebShop.DataAccess.DataAccess;
-using WebShop.DataAccess.Repositories;
-using WebShop.DataAccess.Repositories.Factory;
+﻿using Microsoft.EntityFrameworkCore;
 using WebShop.Domain.Models;
+using WebShop.Infrastructure.DataAccess;
+using WebShop.Infrastructure.Repositories;
+using WebShop.Infrastructure.Repositories.Factory;
 using WebShop.Infrastructure.UnitOfWork;
 using WebShopTests.TestData;
 
@@ -45,7 +37,7 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
             {
                 Id = 1,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
 
@@ -71,7 +63,7 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
             {
                 Id = 1,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
             await _dbContext.AddAsync(product);
@@ -95,7 +87,7 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
             {
                 Id = 1,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
 
@@ -103,7 +95,7 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
             {
                 Id = 2,
                 Name = "Test2",
-                Amount = 20,
+                Stock = 20,
                 Price = 20
             };
 
@@ -175,7 +167,7 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
             {
                 Id = 1,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
 
@@ -206,7 +198,7 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
             {
                 Id = 1,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
 
@@ -233,7 +225,7 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
             {
                 Id = 1,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
 

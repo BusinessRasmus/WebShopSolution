@@ -1,9 +1,6 @@
-﻿using WebShop.DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore;
-using WebShop.DataAccess.DataAccess;
-using WebShop.Infrastructure.Notifications.Subjects;
-using WebShop.Domain.Models;
-using WebShop.DataAccess.Repositories.Factory;
+﻿using WebShop.Infrastructure.DataAccess;
+using WebShop.Infrastructure.Repositories.Factory;
+using WebShop.Infrastructure.Repositories;
 
 namespace WebShop.Infrastructure.UnitOfWork
 {

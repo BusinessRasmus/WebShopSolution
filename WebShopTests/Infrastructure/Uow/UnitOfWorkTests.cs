@@ -1,16 +1,12 @@
 using FakeItEasy;
 using Microsoft.EntityFrameworkCore;
-using Moq;
-using WebShop.Controllers;
-using WebShop.DataAccess.DataAccess;
-using WebShop.DataAccess.Repositories;
-using WebShop.DataAccess.Repositories.Factory;
 using WebShop.Domain.Models;
-using WebShop.Infrastructure.Notifications.Observers;
-using WebShop.Infrastructure.Notifications.Subjects;
+using WebShop.Infrastructure.DataAccess;
+using WebShop.Infrastructure.Repositories;
+using WebShop.Infrastructure.Repositories.Factory;
 using WebShop.Infrastructure.UnitOfWork;
 
-namespace WebShopTests.Infrastructure.UnitOfWorks
+namespace WebShopTests.Infrastructure.Uow
 {
     public class UnitOfWorkTests
     {

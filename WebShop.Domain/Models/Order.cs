@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using WebShop.Domain.Interfaces;
 
 namespace WebShop.Domain.Models
@@ -14,16 +9,13 @@ namespace WebShop.Domain.Models
         public int Id { get; set; }
 
         [Required]
-        public required Customer Customer { get; set; }
+        public required string CustomerFirstName { get; set; }
 
         [Required]
-        public int CustomerId { get; set; }
-
-        [Required]
-        public int Quantity { get; set; }
+        public string OrderStatus { get; set; } = "Pending";
 
         [JsonIgnore]
-        public ICollection<OrderItem> OrderProducts { get; set; } = new List<OrderItem>();
+        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     }
 }

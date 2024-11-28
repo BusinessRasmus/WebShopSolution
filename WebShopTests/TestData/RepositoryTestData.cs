@@ -12,14 +12,13 @@ namespace WebShopTests.TestData
             {
                 new Product[]
                 {
-                new Product { Name = "Test", Amount = 10, Price = 25 },
-                new Product { Name = "Test2", Amount = 5, Price = 19.80 },
-                new Product { Name = "Test3", Amount = 15, Price = 9.80 },
-                new Product { Name = "Test4", Amount = 20, Price = 39.80 }
+                new Product { Name = "Test", Stock = 10, Price = 25 },
+                new Product { Name = "Test2", Stock = 5, Price = 19.80 },
+                new Product { Name = "Test3", Stock = 15, Price = 9.80 },
+                new Product { Name = "Test4", Stock = 20, Price = 39.80 }
                 }
             };
         }
-
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

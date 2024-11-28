@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebShop.Domain.Models;
+﻿using WebShop.Domain.Models;
 using WebShop.Infrastructure.Notifications.Subjects;
 
 namespace WebShop.Infrastructure.Notifications.Factory

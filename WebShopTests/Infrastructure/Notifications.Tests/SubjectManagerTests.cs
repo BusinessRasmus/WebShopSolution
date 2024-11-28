@@ -1,10 +1,4 @@
 ﻿using FakeItEasy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebShop.DataAccess.Repositories;
 using WebShop.Domain.Models;
 using WebShop.Infrastructure.Notifications.Factory;
 using WebShop.Infrastructure.Notifications.SubjectManager;

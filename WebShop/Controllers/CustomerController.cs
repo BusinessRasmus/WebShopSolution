@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
-using WebShop.DataAccess.Repositories;
 using WebShop.Domain.Models;
-using WebShop.Infrastructure.Notifications.Subjects;
 using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebShop.Controllers
@@ -38,8 +35,6 @@ namespace WebShop.Controllers
             var repository = _unitOfWork.Repository<Customer>();
             var customer = await repository.GetByIdAsync(id);
 
-            ProductSubject productSubject = new ProductSubject();
-
             if (customer is null)
             {
                 return NotFound($"No customer with id {id} was found.");
@@ -48,7 +43,6 @@ namespace WebShop.Controllers
             return Ok(customer);
         }
 
-        // Endpoint för att lägga till en ny produkt
         [HttpPost]
         public async Task<ActionResult> AddCustomer(Customer customer)
         {
@@ -97,14 +91,15 @@ namespace WebShop.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var customerToDelete = await _unitOfWork.Repository<Customer>().GetByIdAsync(id);
+            var repo = _unitOfWork.Repository<Customer>();
+            var customerToDelete = await repo.GetByIdAsync(id);
 
             if (customerToDelete is null)
                 return NotFound($"No customer with id {id} was found.");
 
             try
             {
-                await _unitOfWork.Repository<Customer>().DeleteAsync(customerToDelete.Id);
+                await repo.DeleteAsync(customerToDelete.Id);
                 await _unitOfWork.CompleteAsync();
             }
             catch (Exception e)

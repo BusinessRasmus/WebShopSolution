@@ -1,15 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static WebShop.DataAccess.Repositories.Factory.RepositoryFactory;
-using WebShop.DataAccess.Repositories;
-using WebShop.DataAccess.DataAccess;
-using WebShop.Domain.Models;
+﻿using WebShop.Infrastructure.DataAccess;
 
-namespace WebShop.DataAccess.Repositories.Factory
+namespace WebShop.Infrastructure.Repositories.Factory
 {
     public class RepositoryFactory(WebShopDbContext context) : IRepositoryFactory
     {

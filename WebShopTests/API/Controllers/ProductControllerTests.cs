@@ -1,16 +1,12 @@
 using FakeItEasy;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Moq;
-using WebShop;
 using WebShop.Controllers;
-using WebShop.DataAccess.DataAccess;
-using WebShop.DataAccess.Repositories;
-using WebShop.DataAccess.Repositories.Factory;
 using WebShop.Domain.Models;
+using WebShop.Infrastructure.DataAccess;
 using WebShop.Infrastructure.Notifications.SubjectManager;
+using WebShop.Infrastructure.Repositories;
+using WebShop.Infrastructure.Repositories.Factory;
 using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebshopTests.API.Controllers
@@ -88,7 +84,7 @@ namespace WebshopTests.API.Controllers
             {
                 Id = 1,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
             await _productController.AddProduct(product);
@@ -116,7 +112,7 @@ namespace WebshopTests.API.Controllers
             {
                 Id = 1,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
             await _productController.AddProduct(product);
@@ -154,7 +150,7 @@ namespace WebshopTests.API.Controllers
             var product = new Product
             {
                 Name = "T",
-                Amount = 20,
+                Stock = 20,
                 Price = 30
             };
 
@@ -198,7 +194,7 @@ namespace WebshopTests.API.Controllers
             {
                 Id = 2,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
             await _productController.AddProduct(product);
@@ -238,7 +234,7 @@ namespace WebshopTests.API.Controllers
             {
                 Id = -1,
                 Name = "Test",
-                Amount = 10,
+                Stock = 10,
                 Price = 10
             };
 
