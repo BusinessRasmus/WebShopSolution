@@ -1,4 +1,5 @@
-﻿using WebShop.Infrastructure.DataAccess;
+﻿using WebShop.Domain.Models;
+using WebShop.Infrastructure.DataAccess;
 
 namespace WebShop.Infrastructure.Repositories.Factory
 {
@@ -6,9 +7,9 @@ namespace WebShop.Infrastructure.Repositories.Factory
     {
         public IRepository<TEntity> CreateRepository<TEntity>() where TEntity : class
         {
-            //Nedanstående utkommenterat kan användas i de fall vi behöver olika repositories för olika entiteter (i optimiseringssyfte).
-            //if (typeof(TEntity) == typeof(Product))
-            //    return (IRepository<TEntity>)new ProductRepository(context);
+            //Nedanstående utkommenterat kan utökas i de fall vi behöver repositories för ytterligare entiteter (i optimiseringssyfte).
+            if (typeof(TEntity) == typeof(Order))
+                return (IRepository<TEntity>)new OrderRepository(context);
 
             return new Repository<TEntity>(context);
         }

@@ -14,13 +14,13 @@ namespace WebShop.Infrastructure.Repositories
             _dbSet = context.Set<TE>();
         }
 
-        public async Task<IEnumerable<TE>> GetAllAsync()
+        public virtual async Task<IEnumerable<TE>> GetAllAsync()
         {
             var list = await _dbSet.ToListAsync();
             return list;
         }
 
-        public async Task<TE> GetByIdAsync(int id)
+        public virtual async Task<TE> GetByIdAsync(int id)
         {
             var result = await _dbSet.FindAsync(id);
             if (result is null)
