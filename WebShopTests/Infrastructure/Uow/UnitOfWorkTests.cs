@@ -2,8 +2,7 @@ using FakeItEasy;
 using Microsoft.EntityFrameworkCore;
 using WebShop.Domain.Models;
 using WebShop.Infrastructure.DataAccess;
-using WebShop.Infrastructure.Repositories;
-using WebShop.Infrastructure.Repositories.Factory;
+using WebShop.Infrastructure.Repositories.Interfaces;
 using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebShopTests.Infrastructure.Uow

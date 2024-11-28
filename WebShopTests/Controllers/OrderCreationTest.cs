@@ -5,6 +5,7 @@ using WebShop.Infrastructure.DataAccess;
 using WebShop.Infrastructure.Notifications.Factory;
 using WebShop.Infrastructure.Notifications.SubjectManager;
 using WebShop.Infrastructure.Repositories.Factory;
+using WebShop.Infrastructure.Repositories.Interfaces;
 using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebShopTests.Controllers

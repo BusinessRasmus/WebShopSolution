@@ -1,4 +1,4 @@
-﻿namespace WebShop.Infrastructure.Repositories.Factory
+﻿namespace WebShop.Infrastructure.Repositories.Interfaces
 {
     public interface IRepositoryFactory
     {

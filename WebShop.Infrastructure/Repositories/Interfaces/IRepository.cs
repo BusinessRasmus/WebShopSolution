@@ -1,4 +1,4 @@
-﻿namespace WebShop.Infrastructure.Repositories
+﻿namespace WebShop.Infrastructure.Repositories.Interfaces
 {
     public interface IRepository<TE> where TE : class
     {

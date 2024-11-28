@@ -5,8 +5,8 @@ using WebShop.Controllers;
 using WebShop.Domain.Models;
 using WebShop.Infrastructure.DataAccess;
 using WebShop.Infrastructure.Notifications.SubjectManager;
-using WebShop.Infrastructure.Repositories;
 using WebShop.Infrastructure.Repositories.Factory;
+using WebShop.Infrastructure.Repositories.Interfaces;
 using WebShop.Infrastructure.UnitOfWork;
 
 namespace WebShopTests.Controllers

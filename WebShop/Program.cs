@@ -6,6 +6,7 @@ using WebShop.Infrastructure.Notifications.Factory;
 using WebShop.Infrastructure.Notifications.SubjectManager;
 using WebShop.Infrastructure.Notifications.Subjects;
 using WebShop.Infrastructure.Repositories.Factory;
+using WebShop.Infrastructure.Repositories.Interfaces;
 using WebShop.Infrastructure.UnitOfWork;
 
 

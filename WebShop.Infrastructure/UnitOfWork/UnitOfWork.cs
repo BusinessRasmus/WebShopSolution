@@ -1,6 +1,5 @@
 ﻿using WebShop.Infrastructure.DataAccess;
-using WebShop.Infrastructure.Repositories.Factory;
-using WebShop.Infrastructure.Repositories;
+using WebShop.Infrastructure.Repositories.Interfaces;
 
 namespace WebShop.Infrastructure.UnitOfWork
 {
