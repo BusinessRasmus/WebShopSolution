@@ -63,14 +63,14 @@ namespace WebShop.Infrastructure.Migrations
                 name: "OrderDetails",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
+                    table.PrimaryKey("PK_OrderDetails", x => new { x.OrderId, x.ProductId });
                     table.ForeignKey(
                         name: "FK_OrderDetails_Orders_Id",
                         column: x => x.Id,
@@ -84,6 +84,11 @@ namespace WebShop.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_Id",
+                table: "OrderDetails",
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerId",

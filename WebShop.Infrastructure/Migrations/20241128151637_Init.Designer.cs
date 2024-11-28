@@ -11,7 +11,7 @@ using WebShop.Infrastructure.DataAccess;
 namespace WebShop.Infrastructure.Migrations
 {
     [DbContext(typeof(WebShopDbContext))]
-    [Migration("20241128132630_Init")]
+    [Migration("20241128151637_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -73,19 +73,21 @@ namespace WebShop.Infrastructure.Migrations
 
             modelBuilder.Entity("WebShop.Domain.Models.OrderDetail", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("Id");
 
                     b.ToTable("OrderDetails");
                 });
