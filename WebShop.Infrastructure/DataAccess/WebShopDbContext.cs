@@ -17,6 +17,8 @@ namespace WebShop.Infrastructure.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<OrderDetail>()
                 .HasKey(op => new { op.OrderId, op.ProductId });
 
@@ -29,8 +31,6 @@ namespace WebShop.Infrastructure.DataAccess
                 .HasOne(od => od.Product)
                 .WithMany(p => p.OrderDetails)
                 .HasForeignKey(od => od.Id);
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }
