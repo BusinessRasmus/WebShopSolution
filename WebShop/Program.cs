@@ -22,18 +22,11 @@ builder.Services.AddScoped<ISubjectManager, SubjectManager>();
 
 builder.Services.AddSingleton<ISubject<Product>, ProductSubject>();
 
-//TODO TAAAAA bort?
-//builder.Services.AddTransient<INotificationObserver<Product>, EmailSenderObserver>();
-//builder.Services.AddTransient<INotificationObserver<Product>, TextMessageSenderObserver>();
-//builder.Services.AddTransient<INotificationObserver<Product>, PushMessageSenderObserver>();
-
 builder.Services.AddTransient<IRepositoryFactory, RepositoryFactory>();
 builder.Services.AddTransient<ISubjectFactory, SubjectFactory>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-
 
 var app = builder.Build();
 

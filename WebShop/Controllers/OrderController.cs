@@ -19,12 +19,15 @@ namespace WebShop.Controllers
         public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
         {
             var repository = _unitOfWork.Repository<Order>();
-            var order = await repository.GetAllAsync();
+            var orders = await repository.GetAllAsync();
 
-            if (!order.Any())
+            var orderDetailsRepository = _unitOfWork.Repository<OrderDetail>();
+            var orderDetails = await orderDetailsRepository.GetAllAsync();
+
+            if (!orders.Any())
                 return NotFound(Enumerable.Empty<Order>());
 
-            return Ok(order);
+            return Ok(orders);
         }
 
         [HttpGet]
@@ -36,6 +39,11 @@ namespace WebShop.Controllers
 
             if (order is null)
                 return NotFound($"No order with id {id} was found.");
+
+            var orderDetailRepository = _unitOfWork.Repository<OrderDetail>();
+            var orderDetails = await orderDetailRepository.GetAllAsync();
+
+            order.OrderDetails = orderDetails.Where(od => od.OrderId == order.Id).ToList();
 
             return Ok(order);
         }
@@ -61,7 +69,7 @@ namespace WebShop.Controllers
 
         [HttpPatch]
         [Route("{id}")]
-        public async Task<ActionResult> UpdateProduct([FromRoute] int id, [FromBody] Order order)
+        public async Task<ActionResult> UpdateOrder([FromRoute] int id, [FromBody] Order order)
         {
             if (!Validator.TryValidateObject(order, new ValidationContext(order), null, true))
             {
@@ -92,8 +100,17 @@ namespace WebShop.Controllers
             if (orderToDelete is null)
                 return NotFound($"No order with id {id} was found.");
 
+            var orderDetailsRepo = _unitOfWork.Repository<OrderDetail>();
+            var allOrderDetails = await orderDetailsRepo.GetAllAsync();
+            var orderDetailsToDelete = allOrderDetails.Where(od => od.OrderId == id);
+
             try
             {
+                foreach (var orderDetail in orderDetailsToDelete)
+                {
+                    await orderDetailsRepo.DeleteAsync(orderDetail.Id);
+                }
+
                 await repo.DeleteAsync(orderToDelete.Id);
                 await _unitOfWork.CompleteAsync();
             }

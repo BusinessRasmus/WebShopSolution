@@ -5,7 +5,6 @@ namespace WebShop.Infrastructure.Notifications.SubjectManager
 {
     public class SubjectManager(ISubjectFactory factory) : ISubjectManager
     {
-        //TODO Tester
         public ISubject<TEntity> Subject<TEntity>() where TEntity : class
         {
             var subject =  factory.CreateSubject<TEntity>();

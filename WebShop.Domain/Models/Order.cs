@@ -14,7 +14,6 @@ namespace WebShop.Domain.Models
         [Required]
         public string OrderStatus { get; set; } = "Pending";
 
-        [JsonIgnore]
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     }

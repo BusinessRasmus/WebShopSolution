@@ -1,3 +1,3 @@
-docker build -t webshop .
+##Repo
+https://github.com/BusinessRasmus/WebShopSolution
 
-docker run -d -p 8080:80 --name webshopcontainer webshop

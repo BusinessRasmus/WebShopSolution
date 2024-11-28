@@ -9,7 +9,7 @@ using WebShop.Infrastructure.Repositories;
 using WebShop.Infrastructure.Repositories.Factory;
 using WebShop.Infrastructure.UnitOfWork;
 
-namespace WebshopTests.API.Controllers
+namespace WebShopTests.Controllers
 {
     public class ProductControllerTests
     {

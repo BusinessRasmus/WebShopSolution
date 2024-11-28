@@ -9,9 +9,7 @@ namespace WebShop.Controllers
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
-
         private readonly IUnitOfWork _unitOfWork;
-
         public CustomerController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -30,7 +28,8 @@ namespace WebShop.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Customer>> GetCustomerById(int id)
+        [Route("{id}")]
+        public async Task<ActionResult<Customer>> GetCustomerById([FromRoute] int id)
         {
             var repository = _unitOfWork.Repository<Customer>();
             var customer = await repository.GetByIdAsync(id);
@@ -44,7 +43,7 @@ namespace WebShop.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddCustomer(Customer customer)
+        public async Task<ActionResult> AddCustomer([FromBody] Customer customer)
         {
             if (customer.FirstName.Contains('<'))
             {

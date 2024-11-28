@@ -7,7 +7,7 @@ using WebShop.Infrastructure.Notifications.SubjectManager;
 using WebShop.Infrastructure.Repositories.Factory;
 using WebShop.Infrastructure.UnitOfWork;
 
-namespace WebShopTests.API.Controllers
+namespace WebShopTests.Controllers
 {
     /*
      * Skapad i debugging-syfte
@@ -53,13 +53,13 @@ namespace WebShopTests.API.Controllers
                 Price = 100,
                 Stock = 50
             };
-            
+
             var customer = new Customer
             {
                 FirstName = "Test",
                 Email = "Hey"
             };
-            
+
             var newOrder = new Order
             {
                 CustomerFirstName = customer.FirstName,
