@@ -2,6 +2,7 @@
 using WebShop.Domain.Models;
 using WebShop.Infrastructure.DataAccess;
 using WebShop.Infrastructure.Repositories;
+using WebShop.Infrastructure.Repositories.Interfaces;
 
 namespace WebShopTests.Infrastructure.Repositories.Tests
 {
@@ -23,6 +24,8 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
         [Fact]
         public async Task GetAllAsync_ReturnsEnumerableOfOrder()
         {
+            // Arrange
+            await EnsureDatabaseDeletedAndCreated();
             var order = new Order
             {
                 Id = 1,
@@ -61,6 +64,9 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
         [Fact]
         public async Task GetByIdAsync_WithValidId_ReturnsOrder()
         {
+            // Arrange
+            await EnsureDatabaseDeletedAndCreated();
+
             var order = new Order
             {
                 Id = 1,
@@ -94,6 +100,12 @@ namespace WebShopTests.Infrastructure.Repositories.Tests
 
             // Assert
             Assert.Equal(order, result);
+        }
+
+        private async Task EnsureDatabaseDeletedAndCreated()
+        {
+            await _dbContext.Database.EnsureDeletedAsync();
+            await _dbContext.Database.EnsureCreatedAsync();
         }
     }
 }
