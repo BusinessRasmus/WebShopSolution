@@ -11,8 +11,8 @@ using WebShop.Infrastructure.DataAccess;
 namespace WebShop.Infrastructure.Migrations
 {
     [DbContext(typeof(WebShopDbContext))]
-    [Migration("20241128151637_Init")]
-    partial class Init
+    [Migration("20241129095019_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,7 +57,7 @@ namespace WebShop.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("OrderStatus")
@@ -87,7 +87,7 @@ namespace WebShop.Infrastructure.Migrations
 
                     b.HasKey("OrderId", "ProductId");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -117,22 +117,26 @@ namespace WebShop.Infrastructure.Migrations
 
             modelBuilder.Entity("WebShop.Domain.Models.Order", b =>
                 {
-                    b.HasOne("WebShop.Domain.Models.Customer", null)
+                    b.HasOne("WebShop.Domain.Models.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("WebShop.Domain.Models.OrderDetail", b =>
                 {
                     b.HasOne("WebShop.Domain.Models.Order", "Order")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebShop.Domain.Models.Product", "Product")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("Id")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

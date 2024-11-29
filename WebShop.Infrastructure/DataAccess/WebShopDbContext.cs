@@ -17,20 +17,25 @@ namespace WebShop.Infrastructure.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<OrderDetail>()
                 .HasKey(op => new { op.OrderId, op.ProductId });
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Customer)
+                .WithMany(c => c.Orders)
+                .HasForeignKey(o => o.CustomerId);
 
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Order)
                 .WithMany(o => o.OrderDetails)
-                .HasForeignKey(od => od.Id);
+                .HasForeignKey(od => od.OrderId);
 
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Product)
                 .WithMany(p => p.OrderDetails)
-                .HasForeignKey(od => od.Id);
-
-            base.OnModelCreating(modelBuilder);
+                .HasForeignKey(od => od.ProductId);
         }
     }
 }

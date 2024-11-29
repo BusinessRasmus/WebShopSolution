@@ -27,7 +27,7 @@ namespace WebShopTests.Infrastructure.Uow
         }
 
         [Fact]
-        public void GetProductRepository_WithValidParameters_ReturnsRepository()
+        public void GetRepository_WithValidParameters_ReturnsRepository()
         {
             // Act
             var result = _sutUow.Repository<Product>();
@@ -37,13 +37,23 @@ namespace WebShopTests.Infrastructure.Uow
         }
 
         [Fact]
-        public void GetProductRepository_WithCustomerClass_ReturnsCustomerRepository()
+        public void GetRepository_WithCustomerClass_ReturnsCustomerRepository()
         {
             // Act
             var result = _sutUow.Repository<Customer>();
 
             // Assert
             Assert.IsAssignableFrom<IRepository<Customer>>(result);
+        }
+
+        [Fact]
+        public void GetRepository_WithOrderClass_ReturnsOrderRepository()
+        {
+            // Act
+            var result = _sutUow.Repository<Order>();
+
+            // Assert
+            Assert.IsAssignableFrom<IRepository<Order>>(result);
         }
     }
 }
