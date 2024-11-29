@@ -1,15 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebShop.Domain.Models;
 using WebShop.Infrastructure.DataAccess;
-using WebShop.Infrastructure.Repositories.Factory;
 using WebShop.Infrastructure.Repositories;
-using WebShop.Infrastructure.UnitOfWork;
-using FakeItEasy;
 
 namespace WebShopTests.Infrastructure.Repositories.Tests
 {

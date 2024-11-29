@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using WebShop.Domain.Interfaces;
 
 namespace WebShop.Domain.Models
