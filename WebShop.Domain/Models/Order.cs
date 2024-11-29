@@ -8,6 +8,10 @@ namespace WebShop.Domain.Models
     {
         public int Id { get; set; }
 
+        public int CustomerId { get; set; }
+
+        public Customer Customer { get; set; }
+
         [Required]
         public required string CustomerFirstName { get; set; }
 

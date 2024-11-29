@@ -22,12 +22,20 @@ namespace WebShop.Infrastructure.Repositories
 
         public override async Task<IEnumerable<Order>> GetAllAsync()
         {
-            return await _orderDbSet.Include(o => o.OrderDetails).ToListAsync();
+            return await _orderDbSet
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .Include(o => o.Customer)
+                .ToListAsync();
         }
 
         public override async Task<Order> GetByIdAsync(int id)
         {
-            var order = await _orderDbSet.Include(o => o.OrderDetails).FirstOrDefaultAsync(o => o.Id == id);
+            var order = await _orderDbSet
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .Include(o => o.Customer)
+                .FirstOrDefaultAsync(o => o.Id == id);
             return order;
         }
     }

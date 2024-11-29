@@ -17,7 +17,6 @@ namespace WebShop.Domain.Models
         [Required]
         public int ProductId { get; set; }
 
-        [JsonIgnore]
         public Product? Product { get; set; }
 
         [Required]
